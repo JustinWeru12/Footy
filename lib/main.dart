@@ -1,41 +1,21 @@
+import 'package:football/football.dart';
+import 'package:football/services/global_provider.dart';
+import 'package:football/services/service_locator.dart';
 import 'package:flutter/material.dart';
-import 'package:football/constants.dart';
-import 'package:football/home/landingpage.dart';
 
+/// The app can be built with the 'free' or 'pro' flavor by running
+/// `flutter run --flavor free --dart-define=flavor=free` or
+/// `flutter run --flavor pro --dart-define=flavor=pro` respectively.
+///
+/// Additionally a twitter api key is required for authentication and can be
+/// specified using
+/// `--dart-define=twitter_consumer_key=your_consumer_key` and
+/// `--dart-define=twitter_consumer_secret=your_consumer_secret`.
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final ValueNotifier<ThemeData> _notifier = ValueNotifier(FootyTheme().harpy);
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeData>(
-        valueListenable: _notifier,
-        builder: (_, theme, __) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Football',
-            theme: theme.copyWith(
-              shadowColor: Colors.grey[400],
-              textTheme: Theme.of(context).textTheme.apply(
-                  fontFamily: 'Montserrat',
-                  bodyColor:
-                      theme == FootyTheme().swan ? Colors.black : Colors.white),
-              iconTheme: Theme.of(context).iconTheme.copyWith(
-                  color:
-                      theme == FootyTheme().swan ? Colors.black : Colors.white),
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            home: const LandingPage(),
-          );
-        });
-  }
+  setupServices();
+  runApp(
+    const GlobalProvider(
+      child: FootballApp(),
+    ),
+  );
 }
