@@ -35,7 +35,7 @@ class HomeAppBar extends StatelessWidget {
     final padding = EdgeInsets.only(
       top: topPadding,
       bottom: bottomPadding,
-      left: config.paddingValue,
+      left: 0,
       right: config.paddingValue,
     );
 

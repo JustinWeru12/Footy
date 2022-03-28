@@ -5,7 +5,6 @@ import 'package:football/football.dart';
 import 'package:football/pages/home/models/default_home_tab_entries.dart';
 import 'package:football/pages/home/models/home_tab_configuration.dart';
 import 'package:football/pages/home/models/home_tab_entry.dart';
-import 'package:football/pages/home/models/home_tab_entry_icon.dart';
 import 'package:football/pages/home/models/home_tab_preferences.dart';
 import 'package:football/services/init_logger.dart';
 import 'package:football/services/service_locator.dart';

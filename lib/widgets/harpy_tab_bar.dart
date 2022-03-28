@@ -7,11 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 class FootballTabBar extends StatefulWidget {
-  const FootballTabBar({
-    required this.tabs,
-    this.endWidgets,
-    this.padding,
-  });
+  const FootballTabBar(
+      {required this.tabs, this.endWidgets, this.padding, Key? key})
+      : super(key: key);
 
   final List<Widget> tabs;
 
@@ -118,6 +116,7 @@ class _FootballTapBarState extends State<FootballTabBar> {
       padding: widget.padding ?? config.edgeInsetsSymmetric(horizontal: true),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           for (int i = 0; i < widget.tabs.length; i++) ...[
             _buildTab(i),

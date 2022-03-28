@@ -363,11 +363,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 //         initialQuery: arguments['initialSearchQuery'],
 //       );
 //       break;
-//     case HomeTabCustomizationScreen.route:
-//       screen = HomeTabCustomizationScreen(
-//         model: arguments['model'],
-//       );
-//       break;
+    case HomeTabCustomizationScreen.route:
+      screen = HomeTabCustomizationScreen(
+        model: arguments['model'],
+      );
+      break;
     case HomeScreen.route:
       screen = const HomeScreen();
       break;

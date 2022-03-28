@@ -7,14 +7,15 @@ import 'package:football/services/theme/harpy_theme.dart';
 /// [delay] can delay the time it takes for the [child] to start the
 /// translation.
 class SlideInAnimation extends StatefulWidget {
-  const SlideInAnimation({
-    required this.child,
-    required this.offset,
-    this.shouldHide = true,
-    this.curve = Curves.fastOutSlowIn,
-    this.duration = kLongAnimationDuration,
-    this.delay = Duration.zero,
-  });
+  const SlideInAnimation(
+      {required this.child,
+      required this.offset,
+      this.shouldHide = true,
+      this.curve = Curves.fastOutSlowIn,
+      this.duration = kLongAnimationDuration,
+      this.delay = Duration.zero,
+      Key? key})
+      : super(key: key);
 
   final Widget child;
   final Offset offset;

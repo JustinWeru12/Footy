@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football/football.dart';
 import 'package:football/services/config_cubit.dart';
 import 'package:football/services/init_logger.dart';
-import 'package:football/services/predefined_themes.dart';
+import 'package:football/services/theme/predefined_themes.dart';
 import 'package:football/services/service_locator.dart';
 import 'package:football/services/theme/harpy_theme.dart';
 import 'package:football/services/theme/harpy_theme_data.dart';

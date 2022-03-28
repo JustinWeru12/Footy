@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:football/pages/home/home_screen.dart';
+import 'package:football/services/navigator.dart';
+import 'package:football/services/service_locator.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -60,7 +63,12 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 30,
             width: 30,
           ),
-          onPressed: () {},
+          onPressed: () {
+            app<FootballNavigator>().pushReplacementNamed(
+              HomeScreen.route,
+              type: RouteType.fade,
+            );
+          },
         ));
   }
 
@@ -83,7 +91,12 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 30,
           width: 30,
         ),
-        onPressed: () {},
+        onPressed: () {
+          app<FootballNavigator>().pushReplacementNamed(
+            HomeScreen.route,
+            type: RouteType.fade,
+          );
+        },
       ),
     );
   }
@@ -107,7 +120,12 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 30,
           width: 30,
         ),
-        onPressed: () {},
+        onPressed: () {
+          app<FootballNavigator>().pushReplacementNamed(
+            HomeScreen.route,
+            type: RouteType.fade,
+          );
+        },
       ),
     );
   }

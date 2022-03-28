@@ -7,9 +7,7 @@ import 'package:football/services/theme/bloc/theme_bloc.dart';
 /// The [GlobalProvider] is built above the root [MaterialApp] to provide
 /// every descendant with globally available blocs & state.
 class GlobalProvider extends StatelessWidget {
-  const GlobalProvider({
-    required this.child,
-  });
+  const GlobalProvider({required this.child, Key? key}) : super(key: key);
 
   final Widget child;
 
