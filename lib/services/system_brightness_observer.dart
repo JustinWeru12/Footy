@@ -8,9 +8,8 @@ import 'package:provider/provider.dart';
 /// We use this instead of [MediaQuery.platformBrightnessOf] to react on system
 /// brightness changes while the app is running.
 class SystemBrightnessObserver extends StatefulWidget {
-  const SystemBrightnessObserver({
-    required this.child,
-  });
+  const SystemBrightnessObserver({required this.child, Key? key})
+      : super(key: key);
 
   final Widget child;
 

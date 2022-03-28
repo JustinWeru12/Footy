@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:football/pages/home/home_screen.dart';
+import 'package:football/pages/home/home_tab_customization_screen.dart';
+import 'package:football/pages/home/models/home_tab_model.dart';
 import 'package:football/pages/login/login_screen.dart';
 import 'package:football/services/fade_route.dart';
 import 'package:football/services/harpy_page_route.dart';
@@ -60,6 +62,17 @@ class FootballNavigator {
       arguments: <String, dynamic>{
         'routeType': type,
         ...?arguments,
+      },
+    );
+  }
+
+  void pushHomeTabCustomizationScreen({
+    required HomeTabModel model,
+  }) {
+    pushNamed(
+      HomeTabCustomizationScreen.route,
+      arguments: <String, dynamic>{
+        'model': model,
       },
     );
   }
@@ -235,18 +248,6 @@ class FootballNavigator {
 //       },
 //     );
 //   }
-
-//   void pushHomeTabCustomizationScreen({
-//     required HomeTabModel model,
-//   }) {
-//     pushNamed(
-//       HomeTabCustomizationScreen.route,
-//       arguments: <String, dynamic>{
-//         'model': model,
-//       },
-//     );
-//   }
-// }
 
 /// [onGenerateRoute] is called whenever a new named route is being pushed to
 /// the app.
