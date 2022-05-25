@@ -4,27 +4,45 @@ import 'package:football/pages/home/models/home_tab_entry.dart';
 /// views in the home screen.
 List<HomeTabEntry> defaultHomeTabEntries = <HomeTabEntry>[
   HomeTabEntry(
-    id: 'home',
+    id: 'today',
     type: HomeTabEntryType.defaultType.value,
     icon: 'home',
-    name: 'timeline',
+    name: 'today',
   ),
   HomeTabEntry(
-    id: 'media',
+    id: 'tomorrow',
     type: HomeTabEntryType.defaultType.value,
-    icon: 'photo',
-    name: 'media',
+    icon: 'home',
+    name: 'tomorrow',
   ),
   HomeTabEntry(
-    id: 'mentions',
+    id: '2 days',
     type: HomeTabEntryType.defaultType.value,
-    icon: 'at',
-    name: 'mentions',
+    icon: 'home',
+    name: '2 days',
   ),
   HomeTabEntry(
-    id: 'search',
+    id: '3 days',
     type: HomeTabEntryType.defaultType.value,
-    icon: 'search',
-    name: 'search',
+    icon: 'home',
+    name: '3 days',
+  ),
+  HomeTabEntry(
+    id: '4 days',
+    type: HomeTabEntryType.defaultType.value,
+    icon: 'home',
+    name: '4 days',
+  ),
+  HomeTabEntry(
+    id: '5 days',
+    type: HomeTabEntryType.defaultType.value,
+    icon: 'home',
+    name: '5 days',
+  ),
+  HomeTabEntry(
+    id: '6 days',
+    type: HomeTabEntryType.defaultType.value,
+    icon: 'home',
+    name: '6 days',
   ),
 ];

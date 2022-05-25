@@ -19,7 +19,7 @@ class FootballThemeProvider extends StatelessWidget {
             : themeBloc.state.darkFootballTheme;
 
         // match the system ui to the current theme
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           updateSystemUi(harpyTheme);
         });
 

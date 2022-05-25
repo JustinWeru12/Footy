@@ -100,7 +100,7 @@ class _FootballDialogState extends State<FootballDialog> {
   }
 
   Future<void> _configureDialogSize() async {
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       final box =
           _dialogSizeKey.currentContext?.findRenderObject() as RenderBox?;
       _dialogSizeCompleter.complete(box?.size);

@@ -4,6 +4,7 @@ import 'package:football/widgets/harpy_list_tile.dart';
 
 class FootballListCard extends StatelessWidget {
   const FootballListCard({
+    Key? key,
     this.title,
     this.subtitle,
     this.leading,
@@ -17,7 +18,7 @@ class FootballListCard extends StatelessWidget {
     this.trailingPadding,
     this.multilineTitle = false,
     this.multilineSubtitle = true,
-  });
+  }) : super(key: key);
 
   final Widget? title;
   final Widget? subtitle;

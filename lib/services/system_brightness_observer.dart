@@ -23,8 +23,7 @@ class _SystemBrightnessObserverState extends State<SystemBrightnessObserver>
   Brightness _systemBrightness = Brightness.light;
 
   Brightness get _currentBrightness =>
-      WidgetsBinding.instance?.platformDispatcher.platformBrightness ??
-      Brightness.light;
+      WidgetsBinding.instance.platformDispatcher.platformBrightness;
 
   @override
   void initState() {
@@ -32,12 +31,12 @@ class _SystemBrightnessObserverState extends State<SystemBrightnessObserver>
 
     _systemBrightness = _currentBrightness;
 
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }

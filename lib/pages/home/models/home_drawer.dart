@@ -18,7 +18,7 @@ import 'package:provider/provider.dart';
 ///
 /// Entries are animated dynamically based on the animation in the tab view.
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer();
+  const HomeDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -194,14 +194,8 @@ class _Entries extends StatelessWidget {
       verticalSpacer,
       FootballListCard(
         leading: const Icon(CupertinoIcons.list_bullet),
-        title: const Text('lists'),
+        title: const Text('leagues'),
         onTap: () {},
-      ),
-      verticalSpacer,
-      FootballListCard(
-        leading: const Icon(FeatherIcons.feather),
-        title: const Text('compose'),
-        onTap: () => {},
       ),
       verticalSpacer,
       verticalSpacer,
@@ -213,7 +207,7 @@ class _Entries extends StatelessWidget {
       verticalSpacer,
       FootballListCard(
           leading: const Icon(FeatherIcons.star),
-          title: const Text('harpy pro'),
+          title: const Text('pro'),
           onTap: () {}),
       verticalSpacer,
       FootballListCard(

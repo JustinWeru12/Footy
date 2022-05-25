@@ -1,20 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:football/api/crud.dart';
+import 'package:football/classes/fixtures.dart';
+import 'package:football/pages/fixtures/screens/fixtures.dart';
 import 'package:football/pages/home/models/home_app_bar.dart';
 import 'package:football/pages/home/models/home_drawer.dart';
 import 'package:football/pages/home/models/home_tab_entry.dart';
 import 'package:football/pages/home/models/home_tab_model.dart';
 import 'package:football/services/config_cubit.dart';
 import 'package:football/services/scroll_direction_listener.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-// TODO: when switching tabs in the home tab view, consider scrolling the
-//  content automatically if it is otherwise covered by the tab bar
-
-class HomeTabView extends StatelessWidget {
-  const HomeTabView();
+class HomeTabView extends StatefulWidget {
+  const HomeTabView({Key? key}) : super(key: key);
 
   static const _indexOffset = 1;
+
+  @override
+  State<HomeTabView> createState() => _HomeTabViewState();
+}
+
+class _HomeTabViewState extends State<HomeTabView> {
+  CrudMethods crudObj = CrudMethods();
+  Future<FixtureList>? fixtures;
+  String sDate = DateFormat('yyyy-MM-dd')
+      .format(DateTime.now().subtract(const Duration(days: 1)));
+  String eDate = DateFormat('yyyy-MM-dd')
+      .format(DateTime.now().add(const Duration(days: 6)));
+
+  @override
+  void initState() {
+    fixtures = CrudMethods().getFixturebyDateRange(sDate, eDate);
+    super.initState();
+  }
 
   Widget _mapEntryContent(
     int index,
@@ -23,14 +42,41 @@ class HomeTabView extends StatelessWidget {
   ) {
     if (entry.isDefaultType) {
       switch (entry.id) {
-        case 'home':
-          return Container();
-        case 'media':
-          return Container();
-        case 'mentions':
-          return Container();
-        case 'search':
-          return Container();
+        case 'today':
+          return FixturesPage(
+            fixtures: fixtures!,
+            date: DateTime.now().subtract(const Duration(days: 1)),
+          );
+        case 'tomorrow':
+          return FixturesPage(
+            fixtures: fixtures!,
+            date: DateTime.now().add(const Duration(days: 1)),
+          );
+        case '2 days':
+          return FixturesPage(
+            fixtures: fixtures!,
+            date: DateTime.now().add(const Duration(days: 2)),
+          );
+        case '3 days':
+          return FixturesPage(
+            fixtures: fixtures!,
+            date: DateTime.now().add(const Duration(days: 3)),
+          );
+        case '4 days':
+          return FixturesPage(
+            fixtures: fixtures!,
+            date: DateTime.now().add(const Duration(days: 4)),
+          );
+        case '5 days':
+          return FixturesPage(
+            fixtures: fixtures!,
+            date: DateTime.now().add(const Duration(days: 5)),
+          );
+        case '6 days':
+          return FixturesPage(
+            fixtures: fixtures!,
+            date: DateTime.now().add(const Duration(days: 6)),
+          );
         default:
           return const SizedBox();
       }
@@ -52,7 +98,7 @@ class HomeTabView extends StatelessWidget {
 
     return DefaultTabController(
       length: model.visibleEntries.length + 1,
-      initialIndex: _indexOffset,
+      initialIndex: HomeTabView._indexOffset,
       child: _HomeTabListener(
         child: Stack(
           children: [

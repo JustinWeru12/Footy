@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 /// Top padding for content in the [HomeTabView].
 class HomeTopPadding extends StatelessWidget {
-  const HomeTopPadding();
+  const HomeTopPadding({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class HomeTopPadding extends StatelessWidget {
 }
 
 class HomeTopSliverPadding extends StatelessWidget {
-  const HomeTopSliverPadding();
+  const HomeTopSliverPadding({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class HomeTopSliverPadding extends StatelessWidget {
 
 /// Bottom padding for content in the [HomeTabView].
 class HomeBottomPadding extends StatelessWidget {
-  const HomeBottomPadding();
+  const HomeBottomPadding({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class HomeBottomPadding extends StatelessWidget {
 }
 
 class HomeBottomSliverPadding extends StatelessWidget {
-  const HomeBottomSliverPadding();
+  const HomeBottomSliverPadding({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

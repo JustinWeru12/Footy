@@ -61,7 +61,7 @@ class _ScrollDirectionListenerState extends State<ScrollDirectionListener>
   @override
   void didPushNext() {
     if (mounted) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() {
           // Assume scrolling up when a new route gets pushed onto the screen.
           // This is a workaround for the ListCardAnimation to prevent a
@@ -75,7 +75,7 @@ class _ScrollDirectionListenerState extends State<ScrollDirectionListener>
 
   void _changeDirection(VerticalDirection direction) {
     if (mounted && _direction != direction) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() {
           _direction = direction;
         });

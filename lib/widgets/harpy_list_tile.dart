@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 class FootballListTile extends StatelessWidget {
   const FootballListTile({
+    Key? key,
     this.title,
     this.subtitle,
     this.leading,
@@ -19,7 +20,7 @@ class FootballListTile extends StatelessWidget {
     this.verticalAlignment,
     this.multilineTitle = false,
     this.multilineSubtitle = true,
-  });
+  }) : super(key: key);
 
   final Widget? title;
   final Widget? subtitle;
