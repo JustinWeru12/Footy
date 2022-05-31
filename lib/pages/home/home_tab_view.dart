@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football/api/crud.dart';
 import 'package:football/classes/fixtures.dart';
-import 'package:football/pages/fixtures/screens/fixtures.dart';
+import 'package:football/pages/fixtures/screens/fixtures_page.dart';
 import 'package:football/pages/home/models/home_app_bar.dart';
 import 'package:football/pages/home/models/home_drawer.dart';
 import 'package:football/pages/home/models/home_tab_entry.dart';
@@ -45,12 +45,12 @@ class _HomeTabViewState extends State<HomeTabView> {
         case 'today':
           return FixturesPage(
             fixtures: fixtures!,
-            date: DateTime.now().subtract(const Duration(days: 1)),
+            date: DateTime.now(),
           );
         case 'tomorrow':
           return FixturesPage(
             fixtures: fixtures!,
-            date: DateTime.now().add(const Duration(days: 1)),
+            date: DateTime.now().subtract(const Duration(days: 1)),
           );
         case '2 days':
           return FixturesPage(

@@ -19,6 +19,7 @@ class FootballScaffold extends StatelessWidget {
       this.appBarBottom,
       this.floatingActionButton,
       this.buildSafeArea = false,
+      this.centerTitle,
       Key? key})
       : super(key: key);
 
@@ -31,6 +32,7 @@ class FootballScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBarBottom;
   final Widget? floatingActionButton;
   final bool buildSafeArea;
+  final bool? centerTitle;
 
   /// The colors used by the [FootballBackground].
   ///
@@ -43,7 +45,7 @@ class FootballScaffold extends StatelessWidget {
     return FittedBox(
       child: Text(
         title!,
-        style: theme.textTheme.headline6,
+        style: theme.textTheme.headline6!.copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -64,9 +66,9 @@ class FootballScaffold extends StatelessWidget {
     MediaQueryData mediaQuery,
   ) {
     final appBar = AppBar(
-      centerTitle: true,
+      centerTitle: centerTitle ?? true,
       backgroundColor: Colors.transparent,
-      elevation: 0,
+      elevation: 4.0,
       actions: actions,
       leading: _leading(context),
       title: title != null && title!.isNotEmpty ? _buildTitle(theme) : null,

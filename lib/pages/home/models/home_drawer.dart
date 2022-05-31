@@ -198,7 +198,6 @@ class _Entries extends StatelessWidget {
         onTap: () {},
       ),
       verticalSpacer,
-      verticalSpacer,
       FootballListCard(
         leading: const Icon(FeatherIcons.settings),
         title: const Text('settings'),
