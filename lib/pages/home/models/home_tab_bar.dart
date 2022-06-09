@@ -7,7 +7,7 @@ import 'package:football/pages/home/models/home_tab_entry_icon.dart';
 import 'package:football/pages/home/models/home_tab_model.dart';
 import 'package:football/services/navigator.dart';
 import 'package:football/services/service_locator.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 import 'package:provider/provider.dart';
 
 /// Builds the tab bar with the tabs for the home screen.
@@ -35,10 +35,10 @@ class HomeTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final harpyTheme = context.watch<FootballTheme>();
+    final footyTheme = context.watch<FootballTheme>();
     final model = context.watch<HomeTabModel>();
 
-    final cardColor = harpyTheme.alternateCardColor;
+    final cardColor = footyTheme.alternateCardColor;
 
     return FootballTabBar(
       padding: padding,
@@ -63,11 +63,11 @@ class _MentionsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final harpyTheme = context.watch<FootballTheme>();
+    final footyTheme = context.watch<FootballTheme>();
     final child = FootballTab(
       icon: HomeTabEntryIcon(entry.icon),
       text: entry.hasName ? Text(entry.name!) : null,
-      cardColor: harpyTheme.alternateCardColor,
+      cardColor: footyTheme.alternateCardColor,
     );
 
     return child;
@@ -79,12 +79,12 @@ class _DrawerTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final harpyTheme = context.watch<FootballTheme>();
+    final footyTheme = context.watch<FootballTheme>();
 
     return FootballTab(
-      cardColor: harpyTheme.alternateCardColor,
-      selectedCardColor: harpyTheme.primaryColor,
-      selectedForegroundColor: harpyTheme.onPrimary,
+      cardColor: footyTheme.alternateCardColor,
+      selectedCardColor: footyTheme.primaryColor,
+      selectedForegroundColor: footyTheme.onPrimary,
       icon: const RotatedBox(
         quarterTurns: 1,
         child: Icon(FeatherIcons.barChart2),

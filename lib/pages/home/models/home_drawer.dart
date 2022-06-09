@@ -3,14 +3,20 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:football/models/helper.dart';
 import 'package:football/pages/home/models/home_content_padding.dart';
+import 'package:football/pages/leagues/leaguepage.dart';
+import 'package:football/pages/settings/about_page.dart';
+import 'package:football/pages/settings/settings_page.dart';
 import 'package:football/services/animations/shifted_position.dart';
 import 'package:football/services/config_cubit.dart';
 import 'package:football/services/default_spacer.dart';
 import 'package:football/services/general_preferences.dart';
 import 'package:football/services/service_locator.dart';
-import 'package:football/services/theme/harpy_theme.dart';
-import 'package:football/widgets/harpy_circle_avatar.dart';
+import 'package:football/services/theme/footy_theme.dart';
+import 'package:football/services/user_auth/authentication.dart';
+import 'package:football/services/user_auth/user.dart';
+import 'package:football/widgets/footy_circle_avatar.dart';
 import 'package:football/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -18,8 +24,16 @@ import 'package:provider/provider.dart';
 ///
 /// Entries are animated dynamically based on the animation in the tab view.
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({Key? key}) : super(key: key);
+  const HomeDrawer(
+      {Key? key,
+      this.auth,
+      required this.logoutCallback,
+      required this.userData})
+      : super(key: key);
 
+  final BaseAuth? auth;
+  final VoidCallback logoutCallback;
+  final UserData userData;
   @override
   Widget build(BuildContext context) {
     final config = context.watch<ConfigCubit>().state;
@@ -32,10 +46,10 @@ class HomeDrawer extends StatelessWidget {
           padding: config.edgeInsets,
           children: [
             const HomeTopPadding(),
-            const _AuthenticatedUser(),
+            _AuthenticatedUser(userData),
             verticalSpacer,
             verticalSpacer,
-            _Entries(animationController),
+            _Entries(animationController, auth, logoutCallback),
             const HomeBottomPadding(),
           ],
         );
@@ -104,7 +118,9 @@ class _DrawerAnimationListenerState extends State<_DrawerAnimationListener>
 }
 
 class _AuthenticatedUser extends StatelessWidget {
-  const _AuthenticatedUser();
+  const _AuthenticatedUser(this.userData);
+
+  final UserData userData;
 
   @override
   Widget build(BuildContext context) {
@@ -118,9 +134,9 @@ class _AuthenticatedUser extends StatelessWidget {
           padding: config.edgeInsets,
           child: Row(
             children: [
-              const FootballCircleAvatar(
+              FootballCircleAvatar(
                 radius: 35,
-                imageUrl:
+                imageUrl: userData.picture ??
                     "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
               ),
               horizontalSpacer,
@@ -129,12 +145,12 @@ class _AuthenticatedUser extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "John Adams",
+                      userData.fullNames ?? "John Adams",
                       style: Theme.of(context).textTheme.headline5,
                     ),
                     smallVerticalSpacer,
                     Text(
-                      'johnadams@gmail.com',
+                      userData.email ?? 'johnadams@gmail.com',
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ],
@@ -149,9 +165,11 @@ class _AuthenticatedUser extends StatelessWidget {
 }
 
 class _Entries extends StatelessWidget {
-  const _Entries(this.controller);
+  const _Entries(this.controller, this.auth, this.logoutCallback);
 
   final AnimationController controller;
+  final BaseAuth? auth;
+  final VoidCallback logoutCallback;
 
   List<Widget> _animate(List<Widget> children) {
     final animated = <Widget>[];
@@ -195,13 +213,17 @@ class _Entries extends StatelessWidget {
       FootballListCard(
         leading: const Icon(CupertinoIcons.list_bullet),
         title: const Text('leagues'),
-        onTap: () {},
+        onTap: () => {
+          Helper.slideToPage(context, const LeaguePage()),
+        },
       ),
       verticalSpacer,
       FootballListCard(
         leading: const Icon(FeatherIcons.settings),
         title: const Text('settings'),
-        onTap: () => {},
+        onTap: () => {
+          Helper.slideToPage(context, const SettingsPage()),
+        },
       ),
       verticalSpacer,
       FootballListCard(
@@ -212,7 +234,9 @@ class _Entries extends StatelessWidget {
       FootballListCard(
         leading: const Icon(FeatherIcons.info),
         title: const Text('about'),
-        onTap: () {},
+        onTap: () => {
+          Helper.slideToPage(context, const AboutPage()),
+        },
       ),
       verticalSpacer,
       verticalSpacer,
@@ -222,7 +246,10 @@ class _Entries extends StatelessWidget {
           color: theme.colorScheme.error,
         ),
         title: const Text('logout'),
-        onTap: () async {},
+        onTap: () {
+          auth!.signOut();
+          Navigator.of(context).pushReplacementNamed('/');
+        },
       ),
     ];
 

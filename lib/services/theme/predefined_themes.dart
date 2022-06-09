@@ -1,10 +1,10 @@
 import 'package:football/football.dart';
-import 'package:football/services/theme/harpy_theme_data.dart';
+import 'package:football/services/theme/footy_theme_data.dart';
 
 const predefinedThemes = [
   _crow, // 0 -> default dark theme
   _swan, // 1 -> default light theme
-  _harpy,
+  _footy,
   if (isPro) ...predefinedProThemes,
 ];
 
@@ -34,8 +34,8 @@ const _swan = FootballThemeData(
   navBarColor: 0x00ffffff,
 );
 
-const _harpy = FootballThemeData(
-  name: 'harpy',
+const _footy = FootballThemeData(
+  name: 'footy',
   backgroundColors: [0xff4f148b, 0xff880E4F],
   primaryColor: 0xffff6ffe,
   secondaryColor: 0xffd570ff,

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'harpy_theme_data.dart';
+part of 'footy_theme_data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

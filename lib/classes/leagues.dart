@@ -36,6 +36,8 @@ class League {
     this.currentStageId,
     this.liveStandings,
     required this.coverage,
+    this.season,
+    this.country,
   });
 
   final int? id;
@@ -51,6 +53,8 @@ class League {
   final int? currentStageId;
   final bool? liveStandings;
   final Coverage coverage;
+  final Season? season;
+  final Country? country;
 
   factory League.fromRawJson(String str) => League.fromJson(json.decode(str));
 
@@ -70,6 +74,8 @@ class League {
         currentStageId: json["current_stage_id"],
         liveStandings: json["live_standings"],
         coverage: Coverage.fromJson(json["coverage"]),
+        season: Season.fromJson(json["season"]),
+        country: Country.fromJson(json["country"]),
       );
 
   Map<String?, dynamic> toJson() => {
@@ -86,6 +92,8 @@ class League {
         "current_stage_id": currentStageId,
         "live_standings": liveStandings,
         "coverage": coverage.toJson(),
+        "season": season!.toJson(),
+        "country": country!.toJson(),
       };
 }
 
@@ -119,5 +127,173 @@ class Coverage {
         "topscorer_goals": topscorerGoals,
         "topscorer_assists": topscorerAssists,
         "topscorer_cards": topscorerCards,
+      };
+}
+
+class Country {
+  Country({
+    this.data,
+  });
+
+  final CountryData? data;
+
+  factory Country.fromRawJson(String str) => Country.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Country.fromJson(Map<String, dynamic> json) => Country(
+        data: CountryData.fromJson(json["data"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": data!.toJson(),
+      };
+}
+
+class CountryData {
+  CountryData({
+    this.id,
+    this.name,
+    this.imagePath,
+    this.extra,
+  });
+
+  final int? id;
+  final String? name;
+  final String? imagePath;
+  final Extra? extra;
+
+  factory CountryData.fromRawJson(String str) =>
+      CountryData.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory CountryData.fromJson(Map<String, dynamic> json) => CountryData(
+        id: json["id"],
+        name: json["name"],
+        imagePath: json["image_path"],
+        extra: Extra.fromJson(json["extra"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "image_path": imagePath,
+        "extra": extra!.toJson(),
+      };
+}
+
+class Extra {
+  Extra({
+    this.continent,
+    this.subRegion,
+    this.worldRegion,
+    this.fifa,
+    this.iso,
+    this.iso2,
+    this.longitude,
+    this.latitude,
+    this.flag,
+  });
+
+  final String? continent;
+  final String? subRegion;
+  final String? worldRegion;
+  final String? fifa;
+  final String? iso;
+  final String? iso2;
+  final String? longitude;
+  final String? latitude;
+  final String? flag;
+
+  factory Extra.fromRawJson(String str) => Extra.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Extra.fromJson(Map<String, dynamic> json) => Extra(
+        continent: json["continent"],
+        subRegion: json["sub_region"],
+        worldRegion: json["world_region"],
+        fifa: json["fifa"],
+        iso: json["iso"],
+        iso2: json["iso2"],
+        longitude: json["longitude"],
+        latitude: json["latitude"],
+        flag: json["flag"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "continent": continent,
+        "sub_region": subRegion,
+        "world_region": worldRegion,
+        "fifa": fifa,
+        "iso": iso,
+        "iso2": iso2,
+        "longitude": longitude,
+        "latitude": latitude,
+        "flag": flag,
+      };
+}
+
+class Season {
+  Season({
+    this.data,
+  });
+
+  final SeasonData? data;
+
+  factory Season.fromRawJson(String str) => Season.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Season.fromJson(Map<String, dynamic> json) => Season(
+        data: SeasonData.fromJson(json["data"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": data!.toJson(),
+      };
+}
+
+class SeasonData {
+  SeasonData({
+    this.id,
+    this.name,
+    this.leagueId,
+    this.isCurrentSeason,
+    this.currentRoundId,
+    this.currentStageId,
+  });
+
+  final int? id;
+  final String? name;
+  final int? leagueId;
+  final bool? isCurrentSeason;
+  final int? currentRoundId;
+  final int? currentStageId;
+
+  factory SeasonData.fromRawJson(String str) =>
+      SeasonData.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory SeasonData.fromJson(Map<String, dynamic> json) => SeasonData(
+        id: json["id"],
+        name: json["name"],
+        leagueId: json["league_id"],
+        isCurrentSeason: json["is_current_season"],
+        currentRoundId:
+            json["current_round_id"] == null ? null : json["current_round_id"],
+        currentStageId:
+            json["current_stage_id"] == null ? null : json["current_stage_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "league_id": leagueId,
+        "is_current_season": isCurrentSeason,
+        "current_round_id": currentRoundId == null ? null : currentRoundId,
+        "current_stage_id": currentStageId == null ? null : currentStageId,
       };
 }

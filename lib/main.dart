@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:football/football.dart';
 import 'package:football/services/global_provider.dart';
 import 'package:football/services/service_locator.dart';
@@ -11,7 +12,10 @@ import 'package:flutter/material.dart';
 /// specified using
 /// `--dart-define=twitter_consumer_key=your_consumer_key` and
 /// `--dart-define=twitter_consumer_secret=your_consumer_secret`.
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   setupServices();
   runApp(
     const GlobalProvider(

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 import 'package:football/widgets/widgets.dart';
 
 class AddListHomeTabCard extends StatelessWidget {
@@ -38,7 +38,7 @@ class AddListHomeTabCard extends StatelessWidget {
             icon,
             Expanded(
               child: Text(
-                proDisabled ? 'add more lists with harpy pro' : 'add list',
+                proDisabled ? 'add more lists with footy pro' : 'add list',
                 style: theme.textTheme.subtitle1,
               ),
             ),

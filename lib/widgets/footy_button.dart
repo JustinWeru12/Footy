@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 import 'package:provider/provider.dart';
 
 /// The base for the [FootballButton].
@@ -243,9 +243,9 @@ class FootballButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final harpyTheme = context.watch<FootballTheme>();
+    final footyTheme = context.watch<FootballTheme>();
 
-    var bgColor = backgroundColor ?? harpyTheme.foregroundColor;
+    var bgColor = backgroundColor ?? footyTheme.foregroundColor;
     var fgColor = _calculateForegroundColor(theme);
 
     if (onTap == null) {

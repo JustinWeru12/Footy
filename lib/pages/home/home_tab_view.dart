@@ -9,13 +9,23 @@ import 'package:football/pages/home/models/home_tab_entry.dart';
 import 'package:football/pages/home/models/home_tab_model.dart';
 import 'package:football/services/config_cubit.dart';
 import 'package:football/services/scroll_direction_listener.dart';
+import 'package:football/services/user_auth/authentication.dart';
+import 'package:football/services/user_auth/user.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class HomeTabView extends StatefulWidget {
-  const HomeTabView({Key? key}) : super(key: key);
+  const HomeTabView(
+      {Key? key,
+      this.auth,
+      required this.logoutCallback,
+      required this.userData})
+      : super(key: key);
 
   static const _indexOffset = 1;
+  final BaseAuth? auth;
+  final VoidCallback logoutCallback;
+  final UserData userData;
 
   @override
   State<HomeTabView> createState() => _HomeTabViewState();
@@ -24,8 +34,7 @@ class HomeTabView extends StatefulWidget {
 class _HomeTabViewState extends State<HomeTabView> {
   CrudMethods crudObj = CrudMethods();
   Future<FixtureList>? fixtures;
-  String sDate = DateFormat('yyyy-MM-dd')
-      .format(DateTime.now().subtract(const Duration(days: 1)));
+  String sDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   String eDate = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(const Duration(days: 6)));
 
@@ -50,7 +59,7 @@ class _HomeTabViewState extends State<HomeTabView> {
         case 'tomorrow':
           return FixturesPage(
             fixtures: fixtures!,
-            date: DateTime.now().subtract(const Duration(days: 1)),
+            date: DateTime.now().add(const Duration(days: 1)),
           );
         case '2 days':
           return FixturesPage(
@@ -104,7 +113,11 @@ class _HomeTabViewState extends State<HomeTabView> {
           children: [
             TabBarView(
               children: [
-                const HomeDrawer(),
+                HomeDrawer(
+                  auth: widget.auth,
+                  logoutCallback: widget.logoutCallback,
+                  userData: widget.userData,
+                ),
                 for (var i = 0; i < model.visibleEntries.length; i++)
                   _mapEntryContent(
                     i,

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:football/pages/home/home_screen.dart';
 import 'package:football/pages/home/home_tab_customization_screen.dart';
 import 'package:football/pages/home/models/home_tab_model.dart';
-import 'package:football/pages/login/login_screen.dart';
+import 'package:football/pages/login/rootpage.dart';
 import 'package:football/services/fade_route.dart';
-import 'package:football/services/harpy_page_route.dart';
+import 'package:football/services/footy_page_route.dart';
+import 'package:football/services/user_auth/authentication.dart';
 import 'package:logging/logging.dart';
 
 final Logger _log = Logger('FootballNavigator');
@@ -369,7 +370,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       );
       break;
     case HomeScreen.route:
-      screen = const HomeScreen();
+      screen = RootPage(auth: Auth());
       break;
 //     case SetupScreen.route:
 //       screen = const SetupScreen();
@@ -379,7 +380,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 //       break;
     default:
       _log.warning('route does not exist; navigating to login screen instead');
-      screen = const LoginScreen();
+      screen = RootPage(auth: Auth());
   }
 
   switch (routeType) {

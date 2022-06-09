@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:football/services/animations/bounce_in_animation.dart';
 import 'package:football/services/animations/slide_in_animation.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 import 'package:football/widgets/widgets.dart';
 
 /// Determines the animation that is used when building a [FootballDialog].
@@ -67,7 +67,7 @@ class FootballDialog extends StatefulWidget {
   /// When `true`, the actions might not have enough space and get clipped.
   final bool constrainActionSize;
 
-  /// Determines the animation used for building the harpy dialog.
+  /// Determines the animation used for building the footy dialog.
   final DialogAnimationType animationType;
 
   @override

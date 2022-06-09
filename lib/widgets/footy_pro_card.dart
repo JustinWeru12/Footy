@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 
 class FootballProCard extends StatelessWidget {
   const FootballProCard({

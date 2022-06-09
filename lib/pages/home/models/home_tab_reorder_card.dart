@@ -7,7 +7,7 @@ import 'package:football/pages/home/models/home_tab_entry.dart';
 import 'package:football/pages/home/models/home_tab_entry_icon.dart';
 import 'package:football/pages/home/models/home_tab_model.dart';
 import 'package:football/services/config_cubit.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 import 'package:provider/provider.dart';
 
 class HomeTabReorderCard extends StatefulWidget {

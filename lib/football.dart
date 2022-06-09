@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:football/pages/login/login_screen.dart';
-import 'package:football/services/harpy_message.dart';
+import 'package:football/pages/login/rootpage.dart';
+import 'package:football/services/footy_message.dart';
 import 'package:football/services/navigator.dart';
 import 'package:football/services/scroll_behavior.dart';
 import 'package:football/services/theme/bloc/theme_bloc.dart';
 import 'package:football/services/service_locator.dart';
-import 'package:football/services/theme/harpy_theme_provider.dart';
+import 'package:football/services/theme/footy_theme_provider.dart';
 import 'package:football/pages/splash/splash_screen.dart';
+import 'package:football/services/user_auth/authentication.dart';
 import 'package:provider/provider.dart';
 
 const isFree = String.fromEnvironment('flavor', defaultValue: 'free') == 'free';
@@ -59,7 +61,7 @@ class _FootballAppState extends State<FootballApp> {
           ? SplashScreen(
               clearsplash: clearSplash,
             )
-          : const LoginScreen(),
+          : RootPage(auth: Auth()),
       builder: (_, child) => _ContentBuilder(child: child),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:football/services/theme/harpy_theme.dart';
-import 'package:football/widgets/harpy_list_tile.dart';
+import 'package:football/services/theme/footy_theme.dart';
+import 'package:football/widgets/footy_list_tile.dart';
 
 class FootballListCard extends StatelessWidget {
   const FootballListCard({

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:football/services/config_cubit.dart';
-import 'package:football/services/theme/harpy_theme_data.dart';
+import 'package:football/services/theme/footy_theme_data.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// The minimum recommended contrast ratio for the visual representation of
@@ -69,7 +69,7 @@ class FootballTheme {
 
   final Config config;
 
-  // custom harpy theme values
+  // custom footy theme values
   late String name;
   late List<Color> backgroundColors;
   late Color primaryColor;

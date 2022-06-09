@@ -1,6 +1,6 @@
 import 'package:football/pages/home/models/home_tab_preferences.dart';
 import 'package:football/services/general_preferences.dart';
-import 'package:football/services/harpy_preferences.dart';
+import 'package:football/services/footy_preferences.dart';
 import 'package:football/services/navigator.dart';
 import 'package:football/services/theme/theme_preferences.dart';
 import 'package:get_it/get_it.dart';

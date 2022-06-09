@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:football/services/config_cubit.dart';
 import 'package:football/services/default_spacer.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 import 'package:football/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';

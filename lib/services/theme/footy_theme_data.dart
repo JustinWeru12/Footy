@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'harpy_theme_data.g.dart';
+part 'footy_theme_data.g.dart';
 
 @JsonSerializable()
 class FootballThemeData extends Equatable {

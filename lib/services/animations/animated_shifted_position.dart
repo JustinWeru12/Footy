@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:football/services/animations/shifted_position.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 
 /// Implicitly animates the position of the [child] relative to the size of the
 /// [child].

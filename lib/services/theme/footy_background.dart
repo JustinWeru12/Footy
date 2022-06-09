@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 import 'package:provider/provider.dart';
 
 /// Builds a background with a gradient from top to bottom.
@@ -31,9 +31,9 @@ class FootballBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final harpyTheme = context.watch<FootballTheme>();
+    final footyTheme = context.watch<FootballTheme>();
 
-    final backgroundColors = colors ?? harpyTheme.backgroundColors;
+    final backgroundColors = colors ?? footyTheme.backgroundColors;
 
     return AnimatedContainer(
       duration: kThemeAnimationDuration,

@@ -1,4 +1,4 @@
-import 'package:football/services/harpy_preferences.dart';
+import 'package:football/services/footy_preferences.dart';
 import 'package:football/services/service_locator.dart';
 
 class HomeTabPreferences {

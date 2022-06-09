@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:football/api/crud.dart';
-import 'package:football/pages/home/home_screen.dart';
-import 'package:football/services/navigator.dart';
-import 'package:football/services/service_locator.dart';
+import 'package:football/models/helper.dart';
+import 'package:football/pages/login/email_login.dart';
+import 'package:football/services/user_auth/authentication.dart';
+import 'package:football/services/user_auth/user.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen(
+      {Key? key,
+      this.title,
+      this.auth,
+      this.loginCallback,
+      required this.logoutCallback})
+      : super(key: key);
+
+  final String? title;
+  final BaseAuth? auth;
+  final VoidCallback? loginCallback;
+  final VoidCallback logoutCallback;
 
   static const route = 'login';
 
@@ -15,9 +27,43 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool isLoading = false;
+  CrudMethods crudObj = CrudMethods();
+
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> _handleSignIn() async {
+    try {
+      await widget.auth!.signInWithGoogle().then((value) {
+        if (value != null) {
+          crudObj.checkExist(value.user!.uid).then((val) {
+            if (val == false) {
+              UserData userData = UserData(
+                fullNames: value.profile!.displayName,
+                email: value.profile!.email,
+                phone: "",
+                picture: value.profile!.photoUrl,
+                userId: value.user!.uid,
+                lastseen: DateTime.now(),
+                created: DateTime.now(),
+              );
+              crudObj.createOrUpdateUserData(userData.getDataMap());
+            }
+          });
+          widget.loginCallback!();
+          if (mounted) {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }
+      });
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 
   Widget _showLogo(Size size) {
@@ -65,10 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
             width: 30,
           ),
           onPressed: () {
-            app<FootballNavigator>().pushReplacementNamed(
-              HomeScreen.route,
-              type: RouteType.fade,
-            );
+            _handleSignIn();
           },
         ));
   }
@@ -93,39 +136,12 @@ class _LoginScreenState extends State<LoginScreen> {
           width: 30,
         ),
         onPressed: () {
-          app<FootballNavigator>().pushReplacementNamed(
-            HomeScreen.route,
-            type: RouteType.fade,
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildFacebookLoginButton() {
-    return Container(
-      height: 48.0,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-        label: Text(
-          "Continue With Facebook",
-          style: Theme.of(context).textTheme.button,
-        ),
-        icon: SvgPicture.asset(
-          "assets/icons/facebook.svg",
-          height: 30,
-          width: 30,
-        ),
-        onPressed: () {
-          app<FootballNavigator>().pushReplacementNamed(
-            HomeScreen.route,
-            type: RouteType.fade,
-          );
+          Helper.slideToPage(
+              context,
+              EmailLogin(
+                  auth: widget.auth!,
+                  loginCallback: widget.loginCallback!,
+                  logoutCallback: widget.logoutCallback));
         },
       ),
     );
@@ -143,8 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
         _buildGoogleLoginButton(),
         const SizedBox(height: 10),
         _buildEmailLoginButton(),
-        const SizedBox(height: 10),
-        _buildFacebookLoginButton(),
         const SizedBox(height: 10),
       ],
     );

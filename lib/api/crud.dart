@@ -1,15 +1,18 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:football/classes/fixtures.dart';
 import 'package:football/classes/leagues.dart';
-import 'package:football/classes/stations.dart';
 import 'package:http/http.dart' as http;
 
 class CrudMethods {
-  final queryParameters = {
-    'api_token': 'V2zPBA4K0u0WTgA9cho3wcXO33cQoLzj1PfF6pC2PaoXqyMkl9bxacZOB0Sd',
-  };
   Future<LeagueList> getLeagues() async {
+    final queryParameters = {
+      'api_token':
+          'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
+      'include': 'country,season'
+    };
     http.Response response = await http.get(
       Uri.https('soccer.sportmonks.com', '/api/v2.0/leagues', queryParameters),
       headers: {
@@ -27,7 +30,7 @@ class CrudMethods {
   Future<Fixture> getFixturebyID(String id) async {
     final queryParam = {
       'api_token':
-          'V2zPBA4K0u0WTgA9cho3wcXO33cQoLzj1PfF6pC2PaoXqyMkl9bxacZOB0Sd',
+          'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
       'include': 'localTeam,visitorTeam,tvstations,referee,venue,league,news'
     };
     http.Response response = await http.get(
@@ -48,7 +51,7 @@ class CrudMethods {
   Future<FixtureList> getFixturebyDate(String date) async {
     final queryParam = {
       'api_token':
-          'V2zPBA4K0u0WTgA9cho3wcXO33cQoLzj1PfF6pC2PaoXqyMkl9bxacZOB0Sd',
+          'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
       'include': 'localTeam,visitorTeam,tvstations,referee,venue,league,news'
     };
     http.Response response = await http.get(
@@ -70,7 +73,7 @@ class CrudMethods {
   Future<FixtureList> getFixturebyDateRange(String sDate, String eDate) async {
     final queryParam = {
       'api_token':
-          'V2zPBA4K0u0WTgA9cho3wcXO33cQoLzj1PfF6pC2PaoXqyMkl9bxacZOB0Sd',
+          'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
       'include': 'localTeam,visitorTeam,tvstations,referee,venue,league,news'
     };
     http.Response response = await http.get(
@@ -89,19 +92,47 @@ class CrudMethods {
     }
   }
 
-  Future<StationList> getTVbyFixtureID(String id) async {
-    http.Response response = await http.get(
-      Uri.https('soccer.sportmonks.com', '/api/v2.0/tvstations/fixture/$id',
-          queryParameters),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    );
-    if (response.statusCode == 200) {
-      return StationList.fromJson(json.decode(response.body));
-    } else {
-      throw Exception("Error while fetching data: ${response.body}");
+  //FIRESTORE CRUD OPERATIONS//
+
+  createOrUpdateUserData(Map<String, dynamic> userDataMap) async {
+    User user = FirebaseAuth.instance.currentUser!;
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('user').doc(user.uid);
+    return ref.set(userDataMap, SetOptions(merge: true));
+  }
+
+  createOrUpdateUserDataWithID(
+      String id, Map<String, dynamic> userDataMap) async {
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('user').doc(id);
+    return ref.set(userDataMap, SetOptions(merge: true));
+  }
+
+  Future<bool> checkExist(String docID) async {
+    bool exists = false;
+    try {
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(docID)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          exists = true;
+        } else {
+          exists = false;
+        }
+      });
+      return exists;
+    } catch (e) {
+      return false;
     }
+  }
+
+  getDataFromUserFromDocument() async {
+    User user = FirebaseAuth.instance.currentUser!;
+    return await FirebaseFirestore.instance
+        .collection('user')
+        .doc(user.uid)
+        .get();
   }
 }

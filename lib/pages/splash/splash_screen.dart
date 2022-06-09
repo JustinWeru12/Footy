@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:football/services/theme/harpy_background.dart';
+import 'package:football/services/theme/footy_background.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:rive/rive.dart';
 

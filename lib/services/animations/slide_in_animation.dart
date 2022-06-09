@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 
 /// Builds its [child] translated by [offset] and slides it into position upon
 /// creation.

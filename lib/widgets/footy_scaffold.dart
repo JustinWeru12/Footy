@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:football/services/theme/harpy_background.dart';
+import 'package:football/services/theme/footy_background.dart';
 import 'package:football/widgets/widgets.dart';
 
 /// A convenience Widget that wraps a [Scaffold] to build a transparent [AppBar]

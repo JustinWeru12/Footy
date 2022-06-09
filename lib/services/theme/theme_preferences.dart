@@ -1,5 +1,5 @@
 import 'package:football/football.dart';
-import 'package:football/services/harpy_preferences.dart';
+import 'package:football/services/footy_preferences.dart';
 import 'package:football/services/service_locator.dart';
 
 class ThemePreferences {
@@ -22,7 +22,7 @@ class ThemePreferences {
   set darkThemeId(int value) =>
       app<FootballPreferences>().setInt('darkThemeId', value, prefix: true);
 
-  /// A list of encoded harpy theme data representing custom themes.
+  /// A list of encoded footy theme data representing custom themes.
   List<String> get customThemes =>
       app<FootballPreferences>().getStringList('customThemes', prefix: true);
   set customThemes(List<String?> value) => app<FootballPreferences>()

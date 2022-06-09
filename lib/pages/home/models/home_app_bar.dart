@@ -6,7 +6,7 @@ import 'package:football/pages/home/models/home_tab_bar.dart';
 import 'package:football/services/animations/animated_shifted_position.dart';
 import 'package:football/services/config_cubit.dart';
 import 'package:football/services/scroll_direction_listener.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 import 'package:provider/provider.dart';
 
 class HomeAppBar extends StatelessWidget {
@@ -63,7 +63,7 @@ class _DynamicAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scrollDirection = ScrollDirection.of(context)!;
-    final harpyTheme = context.watch<FootballTheme>();
+    final footyTheme = context.watch<FootballTheme>();
     final config = context.watch<ConfigCubit>().state;
 
     return AnimatedShiftedPosition(
@@ -73,7 +73,7 @@ class _DynamicAppBar extends StatelessWidget {
               : const Offset(0, -1)
           : Offset.zero,
       child: AnnotatedRegion(
-        value: harpyTheme.systemUiStyle,
+        value: footyTheme.systemUiStyle,
         child: HomeTabBar(
           padding: padding,
         ),

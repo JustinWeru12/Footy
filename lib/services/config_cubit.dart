@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:football/services/harpy_preferences.dart';
+import 'package:football/services/footy_preferences.dart';
 import 'package:football/services/service_locator.dart';
-import 'package:football/services/theme/harpy_theme.dart';
+import 'package:football/services/theme/footy_theme.dart';
 
 part 'config.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:football/classes/fixtures.dart';
 import 'package:football/models/helper.dart';
-import 'package:football/widgets/harpy_scaffold.dart';
+import 'package:football/widgets/footy_scaffold.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 
