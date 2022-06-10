@@ -38,7 +38,7 @@ class _FootballAppState extends State<FootballApp> {
     final themeBloc = context.watch<ThemeBloc>();
     final systemBrightness = context.watch<Brightness>();
     return MaterialApp(
-      title: 'Football',
+      title: 'Live Football On TV',
       debugShowCheckedModeBanner: false,
       theme: themeBloc.state.lightFootballTheme.themeData,
       darkTheme: themeBloc.state.darkFootballTheme.themeData,

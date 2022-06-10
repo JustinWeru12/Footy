@@ -24,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   CrudMethods crudObj = CrudMethods();
-  UserData? userData;
+  UserData? userData = UserData();
   @override
   void initState() {
     widget.auth!.getCurrentUser().then((user) => {

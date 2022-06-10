@@ -3,7 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:football/classes/fixtures.dart';
 import 'package:football/models/helper.dart';
 import 'package:football/pages/fixtures/screens/fixture_info.dart';
+import 'package:football/services/theme/footy_theme.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class FixtureCard extends StatefulWidget {
@@ -23,7 +25,8 @@ class _FixtureCardState extends State<FixtureCard> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         value,
-        style: const TextStyle(fontSize: 20, color: Colors.white),
+        style: const TextStyle(
+            fontFamily: "Comfortaa", fontSize: 20, color: Colors.white),
         textAlign: TextAlign.center,
       ),
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -37,6 +40,7 @@ class _FixtureCardState extends State<FixtureCard> {
 
   @override
   Widget build(BuildContext context) {
+    final footyTheme = context.watch<FootballTheme>();
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: InkWell(
@@ -50,147 +54,195 @@ class _FixtureCardState extends State<FixtureCard> {
             children: [
               Align(
                 alignment: Alignment.centerRight,
-                child: Container(
-                  // height: Helper.setHeight(context, factor: 0.2),
-                  margin: EdgeInsets.symmetric(
-                      horizontal: Helper.setWidth(context, factor: 0.1)),
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Helper.setWidth(context, factor: 0.08)),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    color: Theme.of(context).colorScheme.secondary,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x40000000),
-                        offset: Offset(0, 0),
-                        blurRadius: 20,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                child: Material(
+                  borderRadius: BorderRadius.circular(15.0),
+                  color: Theme.of(context).cardTheme.color,
+                  type: MaterialType.transparency,
+                  child: Container(
+                    // height: Helper.setHeight(context, factor: 0.2),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: Helper.setWidth(context, factor: 0.1)),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: footyTheme.alternateCardColor,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x40FFFFFF),
+                          offset: Offset(2, 2),
+                          blurRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 6.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                "${widget.fixture.localTeam!.data!.name ?? " "} vs. ${widget.fixture.visitorTeam!.data!.name ?? " "}",
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  Helper.setWidth(context, factor: 0.08)),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 6.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "${widget.fixture.localTeam!.data!.name ?? " "} vs. ${widget.fixture.visitorTeam!.data!.name ?? " "}",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontFamily: "Comfortaa",
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      InkWell(
+                                        onTap: (() {
+                                          widget.onSaved ?? onSaved(context);
+                                        }),
+                                        child: SvgPicture.asset(
+                                          "assets/icons/save.svg",
+                                          fit: BoxFit.contain,
+                                          color: Theme.of(context).primaryColor,
+                                          height: 20,
+                                          width: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(
+                                    "Leg:  ${widget.fixture.leg ?? ""}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontFamily: "Comfortaa",
+                                      fontSize: 13,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/icons/calendar.svg",
+                                        fit: BoxFit.contain,
+                                        color: Theme.of(context).primaryColor,
+                                        height: 20,
+                                        width: 20,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        DateFormat('yyyy-MM-dd').format(widget
+                                            .fixture.time!.startingAt!.date!),
+                                        style: const TextStyle(
+                                            fontFamily: "Comfortaa",
+                                            height: 1,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        widget.fixture.time!.startingAt!.time!
+                                            .substring(0, 5),
+                                        style: const TextStyle(
+                                            fontFamily: "Comfortaa",
+                                            height: 1,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        widget.fixture.time!.startingAt!
+                                                .timezone ??
+                                            "",
+                                        style: const TextStyle(
+                                            fontFamily: "Comfortaa",
+                                            height: 1,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/icons/location2.svg",
+                                        fit: BoxFit.contain,
+                                        color: Theme.of(context).primaryColor,
+                                        height: 20,
+                                        width: 20,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      SizedBox(
+                                        width: Helper.setWidth(context,
+                                            factor: 0.5),
+                                        child: Text(
+                                          widget.fixture.venue!.data!.name ??
+                                              "",
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              fontFamily: "Comfortaa",
+                                              height: 1,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                const Divider(),
+                              ]),
+                        ),
+                        widget.fixture.tvstations!.data!.isNotEmpty
+                            ? Wrap(
+                                alignment: WrapAlignment.spaceEvenly,
+                                spacing: 2.0,
+                                children: widget.fixture.tvstations!.data!
+                                    .map((station) => Chip(
+                                        backgroundColor:
+                                            Theme.of(context).primaryColor,
+                                        label: Text(
+                                          station.tvstation ?? "",
+                                          style: const TextStyle(
+                                            fontFamily: "Comfortaa",
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )))
+                                    .toList())
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "No TV channels listed for this fixture",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontFamily: "Comfortaa",
+                                    fontSize: 16,
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
-                              const Spacer(),
-                              InkWell(
-                                onTap: (() {
-                                  widget.onSaved ?? onSaved(context);
-                                }),
-                                child: SvgPicture.asset(
-                                  "assets/icons/save.svg",
-                                  fit: BoxFit.contain,
-                                  color: Theme.of(context).primaryColor,
-                                  height: 20,
-                                  width: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            "Leg:\t\t\t\t\t${widget.fixture.leg ?? ""}",
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                "assets/icons/calendar.svg",
-                                fit: BoxFit.contain,
-                                color: Theme.of(context).primaryColor,
-                                height: 20,
-                                width: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                "\t\t\t\t\t${DateFormat('yyyy-MM-dd').format(widget.fixture.time!.startingAt!.date!)}",
-                                style: const TextStyle(
-                                    height: 1,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                "assets/icons/clock.svg",
-                                fit: BoxFit.contain,
-                                color: Theme.of(context).primaryColor,
-                                height: 20,
-                                width: 20,
-                              ),
-                              Text(
-                                "\t\t\t\t${widget.fixture.time!.startingAt!.time}",
-                                style: const TextStyle(
-                                    height: 1,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                widget.fixture.time!.startingAt!.timezone ?? "",
-                                style: const TextStyle(
-                                    height: 1,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                "assets/icons/location2.svg",
-                                fit: BoxFit.contain,
-                                color: Theme.of(context).primaryColor,
-                                height: 20,
-                                width: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                "\t\t\t\t\t${widget.fixture.venue!.data!.name ?? ""}",
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    height: 1,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                      ]),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               Align(

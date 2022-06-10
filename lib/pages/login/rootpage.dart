@@ -72,17 +72,10 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
           authStatus = AuthStatus.loggedIn;
         });
       }
-    });
-    if (mounted) {
-      setState(() {
-        crudObj.getDataFromUserFromDocument().then((value) {
-          authStatus = AuthStatus.loggedIn;
-          crudObj.createOrUpdateUserData({"online": true});
-          // Navigator.of(context).pushReplacementNamed('/');
-        });
+          Navigator.of(context).pushReplacementNamed('/');
       });
     }
-  }
+  
 
   void logoutCallback() {
     widget.auth!.signOut().then((value) => setState(() {

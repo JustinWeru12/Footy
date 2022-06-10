@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:football/classes/leagues.dart';
 import 'package:football/models/helper.dart';
 import 'package:football/services/default_spacer.dart';
+import 'package:football/services/theme/footy_theme.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class LeagueCard extends StatefulWidget {
@@ -22,7 +24,8 @@ class _LeagueCardState extends State<LeagueCard> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         value,
-        style: const TextStyle(fontSize: 20, color: Colors.white),
+        style: const TextStyle(
+            fontFamily: "Comfortaa", fontSize: 20, color: Colors.white),
         textAlign: TextAlign.center,
       ),
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -36,6 +39,7 @@ class _LeagueCardState extends State<LeagueCard> {
 
   @override
   Widget build(BuildContext context) {
+    final footyTheme = context.watch<FootballTheme>();
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: SizedBox(
@@ -53,7 +57,7 @@ class _LeagueCardState extends State<LeagueCard> {
                     left: Helper.setWidth(context, factor: 0.08)),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: footyTheme.alternateCardColor,
                   boxShadow: const [
                     BoxShadow(
                       color: Color(0x40000000),
@@ -75,6 +79,7 @@ class _LeagueCardState extends State<LeagueCard> {
                               "${widget.league.name}",
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
+                                fontFamily: "Comfortaa",
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -101,6 +106,7 @@ class _LeagueCardState extends State<LeagueCard> {
                           "Type: ${widget.league.type}",
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
+                            fontFamily: "Comfortaa",
                             fontSize: 14,
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
@@ -113,6 +119,7 @@ class _LeagueCardState extends State<LeagueCard> {
                         child: Text(
                           "${widget.league.season!.data!.name}",
                           style: const TextStyle(
+                              fontFamily: "Comfortaa",
                               height: 1,
                               fontSize: 12,
                               fontWeight: FontWeight.w600),
@@ -137,6 +144,7 @@ class _LeagueCardState extends State<LeagueCard> {
                             child: Text(
                               "${widget.league.country!.data!.name} | ${widget.league.country!.data!.extra!.continent}",
                               style: const TextStyle(
+                                  fontFamily: "Comfortaa",
                                   height: 1,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600),

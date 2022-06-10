@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:756731370097:android:ff077a498f753d25c499d0",
+        "mobilesdk_app_id": "1:756731370097:android:0369699126797ee9c499d0",
         "android_client_info": {
-          "package_name": "com.visualdesign.footylive"
+          "package_name": "com.visualdesign.livefootballontvlite"
         }
       },
       "oauth_client": [
         {
-          "client_id": "756731370097-7vrudqgo9spasmv1kjbhpe8seplur7d3.apps.googleusercontent.com",
+          "client_id": "756731370097-0khap48hpn73j0bjf80mmenbn1oh3qdr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.visualdesign.footylive",
+            "package_name": "com.visualdesign.livefootballontvlite",
             "certificate_hash": "74cecb96caef3754d09edf52d589dafff16d365c"
           }
         },

@@ -1,4 +1,4 @@
-package com.visualdesign.footylive
+package com.visualdesign.livefootballontvlite
 
 import io.flutter.embedding.android.FlutterActivity
 

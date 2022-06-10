@@ -45,63 +45,82 @@ class _FixturesPageState extends State<FixturesPage> {
     return FootballScaffold(
         body: Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          SizedBox(height: Helper.setHeight(context, factor: 0.12)),
-          FutureBuilder<FixtureList>(
-            future: widget.fixtures,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return snapshot.data!.data.isNotEmpty
-                    ? MediaQuery.removePadding(
-                        context: context,
-                        removeTop: true,
-                        child: isEmpty(snapshot)
-                            ? const Center(
-                                child: Text("No Fixtures for this Date",
-                                    style: TextStyle(fontSize: 20)),
-                              )
-                            : ListView.builder(
-                                itemCount: snapshot.data!.data.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, i) {
-                                  return isThisDate(snapshot, i)
-                                      ? FixtureCard(
-                                          fixture: snapshot.data!.data[i])
-                                      : Container();
-                                }),
-                      )
-                    : const Center(
-                        child: Text("No Fixtures for this Date",
-                            style: TextStyle(fontSize: 20)),
-                      );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(snapshot.error.toString(),
-                      style: const TextStyle(fontSize: 20)),
-                );
-              } else {
-                return Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: Helper.setHeight(context, factor: 0.15),
-                        width: Helper.setHeight(context, factor: 0.15),
-                        child: const Center(
-                          child: RiveAnimation.asset(
-                            'assets/rive/animated_icon.riv',
-                            fit: BoxFit.contain,
+      child: SingleChildScrollView(
+        physics: const ScrollPhysics(),
+        child: Column(
+          children: [
+            SizedBox(height: Helper.setHeight(context, factor: 0.12)),
+            FutureBuilder<FixtureList>(
+              future: widget.fixtures,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return snapshot.data!.data.isNotEmpty
+                      ? MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          child: isEmpty(snapshot)
+                              ? Center(
+                                  child: Text("No Fixtures for this Date",
+                                      style: TextStyle(
+                                          fontFamily: "Comfortaa",
+                                          color: Theme.of(context).primaryColor,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20)),
+                                )
+                              : ListView.builder(
+                                  itemCount: snapshot.data!.data.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, i) {
+                                    return isThisDate(snapshot, i)
+                                        ? FixtureCard(
+                                            fixture: snapshot.data!.data[i])
+                                        : Container();
+                                  }),
+                        )
+                      : Center(
+                          child: Text("No Fixtures for this Date",
+                              style: TextStyle(
+                                  fontFamily: "Comfortaa",
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20)),
+                        );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(snapshot.error.toString(),
+                        style: const TextStyle(fontSize: 20)),
+                  );
+                } else {
+                  return Center(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: Helper.setHeight(context, factor: 0.15),
+                          width: Helper.setHeight(context, factor: 0.15),
+                          child: const Center(
+                            child: RiveAnimation.asset(
+                              'assets/rive/animated_icon.riv',
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
-                      ),
-                      const Text("Loading....", style: TextStyle(fontSize: 20)),
-                    ],
-                  ),
-                );
-              }
-            },
-          ),
-        ],
+                        Text(
+                          "Loading....",
+                          style: TextStyle(
+                              fontFamily: "Comfortaa",
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     ));
   }
