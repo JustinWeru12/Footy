@@ -27,6 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
   UserData? userData = UserData();
   @override
   void initState() {
+    loadUser();
+    super.initState();
+  }
+
+  void loadUser() {
     widget.auth!.getCurrentUser().then((user) => {
           setState(() {
             crudObj.getDataFromUserFromDocument().then((value) {
@@ -46,8 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           }),
         });
-
-    super.initState();
   }
 
   @override

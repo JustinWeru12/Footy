@@ -38,6 +38,14 @@ class _FixtureCardState extends State<FixtureCard> {
     showInSnackBar(context, "Fixture Saved");
   }
 
+  List<String> getStations(List<TvstationsDatum> stations) {
+    List<String> names = [];
+    for (int i = 0; i < stations.length; i++) {
+      names.add(stations[i].tvstation!);
+    }
+    return names;
+  }
+
   @override
   Widget build(BuildContext context) {
     final footyTheme = context.watch<FootballTheme>();
@@ -211,22 +219,21 @@ class _FixtureCardState extends State<FixtureCard> {
                               ]),
                         ),
                         widget.fixture.tvstations!.data!.isNotEmpty
-                            ? Wrap(
-                                alignment: WrapAlignment.spaceEvenly,
-                                spacing: 2.0,
-                                children: widget.fixture.tvstations!.data!
-                                    .map((station) => Chip(
-                                        backgroundColor:
-                                            Theme.of(context).primaryColor,
-                                        label: Text(
-                                          station.tvstation ?? "",
-                                          style: const TextStyle(
-                                            fontFamily: "Comfortaa",
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        )))
-                                    .toList())
+                            ? Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    8.0, 0.0, 8.0, 8.0),
+                                child: Text(
+                                  getStations(widget.fixture.tvstations!.data!)
+                                      .join(" | "),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      fontFamily: "Comfortaa",
+                                      height: 1.5,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              )
                             : Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(

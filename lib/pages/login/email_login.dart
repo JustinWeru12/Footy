@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:football/api/crud.dart';
@@ -186,10 +184,6 @@ class _EmailLoginState extends State<EmailLogin> {
               const SizedBox(
                 height: 5.0,
               ),
-              _formType == FormType.register ? _buildPhoneField() : Container(),
-              const SizedBox(
-                height: 5.0,
-              ),
               _formType != FormType.reset ? _buildPasswordField() : Container(),
               const SizedBox(
                 height: 5.0,
@@ -223,7 +217,7 @@ class _EmailLoginState extends State<EmailLogin> {
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!
-                .copyWith(color: Colors.red),
+                .copyWith(fontFamily: "Comfortaa", color: Colors.red),
             textAlign: TextAlign.center));
   }
 
@@ -325,36 +319,6 @@ class _EmailLoginState extends State<EmailLogin> {
             return 'Passwords don\'t correspond';
           }
           return null;
-        },
-      ),
-    );
-  }
-
-  Widget _buildPhoneField() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: TextFormField(
-        maxLines: 1,
-        initialValue: '+1',
-        keyboardType: TextInputType.number,
-        key: const Key('phone'),
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
-          labelText: 'Phone',
-          hintText: '+448000000000',
-          prefixIcon: Icon(
-            Icons.phone,
-            color: Theme.of(context).cardColor,
-          ),
-        ),
-        validator: (value) {
-          if (value!.isEmpty || value.length < 12) {
-            return 'Enter a valid Phone Number';
-          }
-          return null;
-        },
-        onSaved: (value) {
-          phoneNo = value;
         },
       ),
     );

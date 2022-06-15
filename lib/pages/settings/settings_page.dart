@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:football/services/default_spacer.dart';
 import 'package:football/widgets/footy_list_card.dart';
@@ -79,17 +78,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             subtitle: const Text(
               'Show TV channels from your region. Displays region specific TV stations and NOT daily listings',
-            ),
-            onTap: () {}),
-        verticalSpacer,
-        FootballListCard(
-            leading: const Icon(CupertinoIcons.sportscourt),
-            title: const Text(
-              'Favorite Leagues',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            subtitle: const Text(
-              'Select your favorite leagues to display your leagues menu',
             ),
             onTap: () {}),
         verticalSpacer,

@@ -1,10 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:football/classes/fixtures.dart';
 import 'package:football/models/helper.dart';
+import 'package:football/services/default_spacer.dart';
 import 'package:football/widgets/footy_scaffold.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -194,17 +193,40 @@ class _FixtureInfoState extends State<FixtureInfo>
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                "Leg:  ${widget.fixture.leg ?? ""}",
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontFamily: "Comfortaa",
-                  fontSize: 14,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    "assets/icons/trophy.svg",
+                    fit: BoxFit.contain,
+                    color: Theme.of(context).primaryColor,
+                    height: 20,
+                    width: 20,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    widget.fixture.league?.data?.name ?? "",
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontFamily: "Comfortaa",
+                        height: 1,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    "-  Leg ${widget.fixture.leg ?? ""}",
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontFamily: "Comfortaa",
+                        height: 1,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
               ),
             ),
+            smallVerticalSpacer,
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -217,7 +239,7 @@ class _FixtureInfoState extends State<FixtureInfo>
                     height: 20,
                     width: 20,
                   ),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 10),
                   Text(
                     DateFormat('yyyy-MM-dd')
                         .format(widget.fixture.time!.startingAt!.date!),
@@ -230,6 +252,7 @@ class _FixtureInfoState extends State<FixtureInfo>
                 ],
               ),
             ),
+            smallVerticalSpacer,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
@@ -242,7 +265,7 @@ class _FixtureInfoState extends State<FixtureInfo>
                     height: 20,
                     width: 20,
                   ),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 10),
                   Text(
                     widget.fixture.time!.startingAt!.time ?? "",
                     style: const TextStyle(
@@ -263,6 +286,7 @@ class _FixtureInfoState extends State<FixtureInfo>
                 ],
               ),
             ),
+            smallVerticalSpacer,
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -275,7 +299,7 @@ class _FixtureInfoState extends State<FixtureInfo>
                     height: 20,
                     width: 20,
                   ),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 10),
                   Text(
                     widget.fixture.venue!.data!.name ?? "",
                     overflow: TextOverflow.ellipsis,
@@ -309,17 +333,17 @@ class _FixtureInfoState extends State<FixtureInfo>
             itemBuilder: (context, i) {
               return Container(
                 // padding: const EdgeInsets.all(8.0),
-                margin: const EdgeInsets.all(8.0),
+                margin: const EdgeInsets.all(6.0),
                 decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10.0)),
                 child: ListTile(
                   title: Text(
                     widget.fixture.tvstations!.data![i].tvstation!,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
+                    style: const TextStyle(
+                      // color: Theme.of(context).primaryColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                       fontFamily: "Comfortaa",
                     ),
                   ),

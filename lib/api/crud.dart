@@ -63,7 +63,6 @@ class CrudMethods {
       },
     );
     if (response.statusCode == 200) {
-      print(response.body);
       return FixtureList.fromJson(json.decode(response.body));
     } else {
       throw Exception("Error while fetching data: ${response.body}");
@@ -85,7 +84,6 @@ class CrudMethods {
       },
     );
     if (response.statusCode == 200) {
-      print(response.body);
       return FixtureList.fromJson(json.decode(response.body));
     } else {
       throw Exception("Error while fetching data: ${response.body}");

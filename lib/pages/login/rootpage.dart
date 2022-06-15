@@ -4,6 +4,7 @@ import 'package:football/api/crud.dart';
 import 'package:football/pages/home/home_screen.dart';
 import 'package:football/pages/login/login_screen.dart';
 import 'package:football/services/user_auth/authentication.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthStatus {
@@ -72,10 +73,9 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
           authStatus = AuthStatus.loggedIn;
         });
       }
-          Navigator.of(context).pushReplacementNamed('/');
-      });
-    }
-  
+      Navigator.of(context).pushReplacementNamed('/');
+    });
+  }
 
   void logoutCallback() {
     widget.auth!.signOut().then((value) => setState(() {
@@ -96,6 +96,37 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
         child: Image.asset('assets/icons/icon.png', fit: BoxFit.cover),
       ),
     );
+  }
+
+  void notificationPlatform() {
+    OneSignal.shared.setNotificationWillShowInForegroundHandler(
+        (OSNotificationReceivedEvent event) {
+      // Will be called whenever a notification is received in foreground
+      // Display Notification, pass null param for not displaying the notification
+      event.complete(event.notification);
+    });
+
+    OneSignal.shared
+        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+      // Will be called whenever a notification is opened/button pressed.
+    });
+
+    OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {
+      // Will be called whenever the permission changes
+      // (ie. user taps Allow on the permission prompt in iOS)
+    });
+
+    OneSignal.shared
+        .setSubscriptionObserver((OSSubscriptionStateChanges changes) {
+      // Will be called whenever the subscription changes
+      // (ie. user gets registered with OneSignal and gets a user ID)
+    });
+
+    OneSignal.shared.setEmailSubscriptionObserver(
+        (OSEmailSubscriptionStateChanges emailChanges) {
+      // Will be called whenever then user's email subscription changes
+      // (ie. OneSignal.setEmail(email) is called and the user gets registered
+    });
   }
 
   @override

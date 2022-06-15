@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:football/pages/login/login_screen.dart';
 import 'package:football/pages/login/rootpage.dart';
 import 'package:football/services/footy_message.dart';
 import 'package:football/services/navigator.dart';

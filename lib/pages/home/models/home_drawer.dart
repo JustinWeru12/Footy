@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:football/models/helper.dart';
 import 'package:football/pages/home/models/home_content_padding.dart';
 import 'package:football/pages/leagues/leaguepage.dart';
+import 'package:football/pages/profile/profilepage.dart';
 import 'package:football/pages/settings/about_page.dart';
 import 'package:football/pages/settings/settings_page.dart';
 import 'package:football/services/animations/shifted_position.dart';
@@ -49,7 +51,7 @@ class HomeDrawer extends StatelessWidget {
             _AuthenticatedUser(userData),
             verticalSpacer,
             verticalSpacer,
-            _Entries(animationController, auth, logoutCallback),
+            _Entries(animationController, auth, logoutCallback, userData),
             const HomeBottomPadding(),
           ],
         );
@@ -145,12 +147,12 @@ class _AuthenticatedUser extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userData.fullNames ?? "John Adams",
+                      userData.fullNames ?? "John Doe",
                       style: Theme.of(context).textTheme.headline5,
                     ),
                     smallVerticalSpacer,
                     Text(
-                      userData.email ?? 'johnadams@gmail.com',
+                      userData.email ?? 'johndoe@gmail.com',
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ],
@@ -165,11 +167,13 @@ class _AuthenticatedUser extends StatelessWidget {
 }
 
 class _Entries extends StatelessWidget {
-  const _Entries(this.controller, this.auth, this.logoutCallback);
+  const _Entries(
+      this.controller, this.auth, this.logoutCallback, this.userData);
 
   final AnimationController controller;
   final BaseAuth? auth;
   final VoidCallback logoutCallback;
+  final UserData userData;
 
   List<Widget> _animate(List<Widget> children) {
     final animated = <Widget>[];
@@ -197,13 +201,15 @@ class _Entries extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final config = context.watch<ConfigCubit>().state;
+    // final config = context.watch<ConfigCubit>().state;
 
     final List<Widget> children = [
       FootballListCard(
           leading: const Icon(CupertinoIcons.person),
           title: const Text('profile'),
-          onTap: () {}),
+          onTap: () {
+            Helper.slideToPage(context, ProfilePage(userData: userData));
+          }),
       verticalSpacer,
       FootballListCard(
           leading: const Icon(CupertinoIcons.search),
@@ -211,21 +217,27 @@ class _Entries extends StatelessWidget {
           onTap: () {}),
       verticalSpacer,
       FootballListCard(
-        leading: const Icon(CupertinoIcons.list_bullet),
+        leading: SvgPicture.asset(
+          "assets/icons/trophy.svg",
+          fit: BoxFit.contain,
+          color: Theme.of(context).iconTheme.color,
+          height: 20,
+          width: 20,
+        ),
         title: const Text('leagues'),
         onTap: () => {
           Helper.slideToPage(context, const LeaguePage()),
         },
       ),
       verticalSpacer,
-      FootballListCard(
-        leading: const Icon(FeatherIcons.settings),
-        title: const Text('settings'),
-        onTap: () => {
-          Helper.slideToPage(context, const SettingsPage()),
-        },
-      ),
-      verticalSpacer,
+      // FootballListCard(
+      //   leading: const Icon(FeatherIcons.settings),
+      //   title: const Text('settings'),
+      //   onTap: () => {
+      //     Helper.slideToPage(context, const SettingsPage()),
+      //   },
+      // ),
+      // verticalSpacer,
       FootballListCard(
           leading: const Icon(FeatherIcons.star),
           title: const Text('pro'),

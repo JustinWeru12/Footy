@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:football/classes/fixtures.dart' as Fixture;
+import 'package:football/classes/fixtures.dart' as fixture;
 import 'package:football/classes/leagues.dart';
 import 'package:football/models/helper.dart';
 import 'package:football/pages/fixtures/models/fixturecard.dart';
@@ -7,7 +7,7 @@ import 'package:football/widgets/footy_scaffold.dart';
 import 'package:rive/rive.dart';
 
 class FixtureByLeaguePage extends StatefulWidget {
-  final Future<Fixture.FixtureList> fixtures;
+  final Future<fixture.FixtureList> fixtures;
   final League league;
   const FixtureByLeaguePage(
       {Key? key, required this.fixtures, required this.league})
@@ -28,34 +28,39 @@ class _FixtureByLeaguePageState extends State<FixtureByLeaguePage> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                FutureBuilder<Fixture.FixtureList>(
+                FutureBuilder<fixture.FixtureList>(
                   future: widget.fixtures,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return snapshot.data!.data.isNotEmpty
+                      return snapshot.data!.data
+                              .where((element) =>
+                                  element.league!.data!.id == widget.league.id)
+                              .isNotEmpty
                           ? MediaQuery.removePadding(
                               context: context,
                               removeTop: true,
-                              child: snapshot.data!.data.isEmpty
-                                  ? const Center(
-                                      child: Text(
-                                          "No Upcoming Fixtures for this league",
-                                          style: TextStyle(fontSize: 20)),
-                                    )
-                                  : ListView.builder(
-                                      itemCount: snapshot.data!.data.length,
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, i) {
-                                        return FixtureCard(
-                                            fixture: snapshot.data!.data[i]);
-                                      }),
+                              child: ListView.builder(
+                                  itemCount: snapshot.data!.data
+                                      .where((element) =>
+                                          element.league!.data!.id ==
+                                          widget.league.id)
+                                      .length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, i) {
+                                    return snapshot.data!.data[i].league!.data!
+                                                .id ==
+                                            widget.league.id
+                                        ? FixtureCard(
+                                            fixture: snapshot.data!.data[i])
+                                        : Container();
+                                  }),
                             )
                           : const Center(
                               child: Text(
                                   "No Upcoming Fixtures for this League",
-                                  style: TextStyle(fontSize: 20)),
+                                  style: TextStyle(
+                                      fontFamily: "Comfortaa", fontSize: 20)),
                             );
                     } else if (snapshot.hasError) {
                       return Center(
@@ -77,7 +82,8 @@ class _FixtureByLeaguePageState extends State<FixtureByLeaguePage> {
                               ),
                             ),
                             const Text("Loading....",
-                                style: TextStyle(fontSize: 20)),
+                                style: TextStyle(
+                                    fontFamily: "Comfortaa", fontSize: 20)),
                           ],
                         ),
                       );

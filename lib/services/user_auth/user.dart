@@ -6,8 +6,12 @@ class UserData {
   final String? picture;
   final String? region;
   final DateTime? lastseen, created;
-  final bool? notify, liveOnly;
-  final List<dynamic>? savedFixture, favTeams, favLeagues;
+  final bool? notify, liveOnly, regionOnly;
+  final List<dynamic>? savedFixture,
+      favTeams,
+      favLeagues,
+      favTeamIds,
+      favLeagueIds;
 
   UserData({
     this.userId,
@@ -20,9 +24,12 @@ class UserData {
     this.created,
     this.notify,
     this.liveOnly,
+    this.regionOnly,
     this.savedFixture,
     this.favTeams,
     this.favLeagues,
+    this.favTeamIds,
+    this.favLeagueIds,
   });
 
   Map<String, dynamic> getDataMap() {
@@ -37,9 +44,12 @@ class UserData {
       "created": created,
       "notify": notify ?? false,
       "liveOnly": liveOnly ?? false,
+      "regionOnly": regionOnly ?? false,
       "savedFixture": savedFixture ?? [],
       "favTeams": favTeams ?? [],
       "favLeagues": favLeagues ?? [],
+      "favTeamIds": favTeamIds ?? [],
+      "favLeagueIds": favLeagueIds ?? [],
     };
   }
 }

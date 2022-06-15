@@ -282,10 +282,8 @@ class SeasonData {
         name: json["name"],
         leagueId: json["league_id"],
         isCurrentSeason: json["is_current_season"],
-        currentRoundId:
-            json["current_round_id"] == null ? null : json["current_round_id"],
-        currentStageId:
-            json["current_stage_id"] == null ? null : json["current_stage_id"],
+        currentRoundId: json["current_round_id"],
+        currentStageId: json["current_stage_id"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -293,7 +291,7 @@ class SeasonData {
         "name": name,
         "league_id": leagueId,
         "is_current_season": isCurrentSeason,
-        "current_round_id": currentRoundId == null ? null : currentRoundId,
-        "current_stage_id": currentStageId == null ? null : currentStageId,
+        "current_round_id": currentRoundId,
+        "current_stage_id": currentStageId,
       };
 }

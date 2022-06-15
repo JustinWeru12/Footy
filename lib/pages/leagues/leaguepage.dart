@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:football/api/crud.dart';
-import 'package:football/classes/fixtures.dart' as Fixture;
+import 'package:football/classes/fixtures.dart' as fixture;
 import 'package:football/classes/leagues.dart';
 import 'package:football/models/helper.dart';
 import 'package:football/pages/leagues/fixture_by_league.dart';
@@ -19,7 +19,7 @@ class LeaguePage extends StatefulWidget {
 class _LeaguePageState extends State<LeaguePage> {
   Future<LeagueList>? leagues;
   CrudMethods crudObj = CrudMethods();
-  Future<Fixture.FixtureList>? fixtures;
+  Future<fixture.FixtureList>? fixtures;
   String sDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   String eDate = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(const Duration(days: 6)));
