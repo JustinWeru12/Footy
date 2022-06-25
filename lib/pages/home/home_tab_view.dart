@@ -22,7 +22,7 @@ class HomeTabView extends StatefulWidget {
       required this.userData})
       : super(key: key);
 
-  static const _indexOffset = 1;
+  static const _indexOffset = 3;
   final BaseAuth? auth;
   final VoidCallback logoutCallback;
   final UserData userData;
@@ -34,7 +34,8 @@ class HomeTabView extends StatefulWidget {
 class _HomeTabViewState extends State<HomeTabView> {
   CrudMethods crudObj = CrudMethods();
   Future<FixtureList>? fixtures;
-  String sDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  String sDate = DateFormat('yyyy-MM-dd')
+      .format(DateTime.now().subtract(const Duration(days: 2)));
   String eDate = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(const Duration(days: 6)));
 
@@ -51,6 +52,18 @@ class _HomeTabViewState extends State<HomeTabView> {
   ) {
     if (entry.isDefaultType) {
       switch (entry.id) {
+        case '-2 days':
+          return FixturesPage(
+              fixtures: fixtures!,
+              date: DateTime.now().subtract(
+                const Duration(days: 2),
+              ));
+        case '-1 day':
+          return FixturesPage(
+              fixtures: fixtures!,
+              date: DateTime.now().subtract(
+                const Duration(days: 1),
+              ));
         case 'today':
           return FixturesPage(
             fixtures: fixtures!,

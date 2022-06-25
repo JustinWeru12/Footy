@@ -69,7 +69,7 @@ class _FixtureCardState extends State<FixtureCard> {
                   child: Container(
                     // height: Helper.setHeight(context, factor: 0.2),
                     margin: EdgeInsets.symmetric(
-                        horizontal: Helper.setWidth(context, factor: 0.1)),
+                        horizontal: Helper.setWidth(context, factor: 0.05)),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15.0),
                       color: footyTheme.alternateCardColor,
@@ -86,7 +86,7 @@ class _FixtureCardState extends State<FixtureCard> {
                         Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal:
-                                  Helper.setWidth(context, factor: 0.08)),
+                                  Helper.setWidth(context, factor: 0.13)),
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,7 +253,7 @@ class _FixtureCardState extends State<FixtureCard> {
                 ),
               ),
               Align(
-                alignment: const Alignment(-1, -0.6),
+                alignment: const Alignment(-1, 0),
                 child: Container(
                   margin: const EdgeInsets.only(top: 10.0),
                   decoration: BoxDecoration(
@@ -285,7 +285,7 @@ class _FixtureCardState extends State<FixtureCard> {
                 ),
               ),
               Align(
-                alignment: const Alignment(1, -0.6),
+                alignment: const Alignment(1, 0),
                 child: Container(
                   margin: const EdgeInsets.only(top: 10.0),
                   decoration: BoxDecoration(

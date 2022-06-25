@@ -12,6 +12,7 @@ import 'package:football/services/theme/footy_theme.dart';
 import 'package:football/services/user_auth/user.dart';
 import 'package:football/widgets/footy_circle_avatar.dart';
 import 'package:football/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -30,15 +31,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final footyTheme = context.watch<FootballTheme>();
     return FootballScaffold(
         title: "Profile",
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: entries(),
+          child: entries(footyTheme),
         ));
   }
 
-  Widget entries() {
+  Widget entries(FootballTheme theme) {
     Widget header(userData) {
       return InkWell(
         borderRadius: kBorderRadius,
@@ -108,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         favoriteLeagues = snapshot.data!["favLeagues"] ?? [];
                         favoriteLeagueIds =
                             snapshot.data!["favLeagueIds"] ?? [];
-                        showModalBottom();
+                        showModalBottom(theme.alternateCardColor);
                       });
                     }),
                 // verticalSpacer,
@@ -147,7 +149,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ? 'Only show games that broadcast live for your region'
                           : 'All matches will show',
                     ),
-                    trailing: CupertinoSwitch(
+                    trailing: Switch.adaptive(
                         value: snapshot.data!["liveOnly"] ?? islive,
                         onChanged: (val) {
                           setState(() {
@@ -166,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     subtitle: Text(
                       'Show TV channels from your region(${snapshot.data!["region"]}).',
                     ),
-                    trailing: CupertinoSwitch(
+                    trailing: Switch.adaptive(
                         value: snapshot.data!["regionOnly"] ?? islive,
                         onChanged: (val) {
                           setState(() {
@@ -187,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ? 'Get alerts and notifications'
                           : "You will not get alerts and notifications",
                     ),
-                    trailing: CupertinoSwitch(
+                    trailing: Switch.adaptive(
                         value: snapshot.data!["notify"] ?? enableNotifications,
                         onChanged: (val) {
                           setState(() {
@@ -221,7 +223,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
   }
 
-  showModalBottom() {
+  showModalBottom(cardColor) {
     return showModalBottomSheet(
         context: context,
         isDismissible: true,
@@ -352,7 +354,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         horizontalSpacer,
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).cardColor,
+                              primary: cardColor,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
                               elevation: 5.0),
@@ -360,11 +362,11 @@ class _ProfilePageState extends State<ProfilePage> {
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6!
-                                  .copyWith(fontWeight: FontWeight.w600)),
-                          icon: const Icon(
-                            CupertinoIcons.checkmark_alt,
-                            color: Colors.white,
-                          ),
+                                  .copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: Theme.of(context).primaryColor)),
+                          icon: Icon(CupertinoIcons.checkmark_alt,
+                              color: Theme.of(context).primaryColor),
                           onPressed: () {
                             crudObj.createOrUpdateUserData({
                               "favLeagues": favoriteLeagues,
@@ -376,19 +378,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         horizontalSpacer,
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).cardColor,
+                              primary: cardColor,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
                               elevation: 5.0),
-                          icon: const Icon(
-                            CupertinoIcons.clear,
-                            color: Colors.white,
-                          ),
+                          icon: Icon(CupertinoIcons.clear,
+                              color: Theme.of(context).primaryColor),
                           label: Text("Cancel",
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6!
-                                  .copyWith(fontWeight: FontWeight.w600)),
+                                  .copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: Theme.of(context).primaryColor)),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:football/services/default_spacer.dart';
 import 'package:football/widgets/footy_list_card.dart';
@@ -50,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
             subtitle: const Text(
               'Only show games that broadcast live for your region',
             ),
-            trailing: CupertinoSwitch(
+            trailing: Switch.adaptive(
                 value: islive,
                 onChanged: (val) {
                   setState(() {
@@ -90,7 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
             subtitle: const Text(
               'Get notifications and alerts',
             ),
-            trailing: CupertinoSwitch(
+            trailing: Switch.adaptive(
                 value: enableNotifications,
                 onChanged: (val) {
                   setState(() {
