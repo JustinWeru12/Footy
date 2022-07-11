@@ -53,12 +53,13 @@ class _FixtureCardState extends State<FixtureCard> {
       padding: const EdgeInsets.all(6.0),
       child: InkWell(
         onTap: () {
-          Helper.scaleToPage(context, FixtureInfo(fixture: widget.fixture));
+          Helper.slideToPage(context, FixtureInfo(fixture: widget.fixture));
         },
         child: SizedBox(
-          // height: Helper.setHeight(context, factor: 0.25),
+          height: 200,
           width: Helper.setWidth(context),
           child: Stack(
+            fit: StackFit.loose,
             children: [
               Align(
                 alignment: Alignment.centerRight,
@@ -82,45 +83,49 @@ class _FixtureCardState extends State<FixtureCard> {
                       ],
                     ),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 6.0),
+                          child: Row(
+                            children: [
+                              const Spacer(),
+                              Text(
+                                "${widget.fixture.localTeam!.data!.name ?? " "} vs. ${widget.fixture.visitorTeam!.data!.name ?? " "}",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: "Comfortaa",
+                                  fontSize: 16,
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              const Spacer(),
+                              InkWell(
+                                onTap: (() {
+                                  widget.onSaved ?? onSaved(context);
+                                }),
+                                child: SvgPicture.asset(
+                                  "assets/icons/save.svg",
+                                  fit: BoxFit.contain,
+                                  color: Theme.of(context).primaryColor,
+                                  height: 20,
+                                  width: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal:
                                   Helper.setWidth(context, factor: 0.13)),
                           child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 6.0),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "${widget.fixture.localTeam!.data!.name ?? " "} vs. ${widget.fixture.visitorTeam!.data!.name ?? " "}",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontFamily: "Comfortaa",
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      InkWell(
-                                        onTap: (() {
-                                          widget.onSaved ?? onSaved(context);
-                                        }),
-                                        child: SvgPicture.asset(
-                                          "assets/icons/save.svg",
-                                          fit: BoxFit.contain,
-                                          color: Theme.of(context).primaryColor,
-                                          height: 20,
-                                          width: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                const Divider(),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
@@ -129,9 +134,9 @@ class _FixtureCardState extends State<FixtureCard> {
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       fontFamily: "Comfortaa",
-                                      fontSize: 13,
+                                      fontSize: 12,
                                       color: Colors.white,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ),
@@ -150,23 +155,25 @@ class _FixtureCardState extends State<FixtureCard> {
                                       ),
                                       const SizedBox(width: 5),
                                       Text(
-                                        DateFormat('yyyy-MM-dd').format(widget
+                                        DateFormat('dd/MM/yyyy').format(widget
                                             .fixture.time!.startingAt!.date!),
                                         style: const TextStyle(
-                                            fontFamily: "Comfortaa",
-                                            height: 1,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600),
+                                          fontFamily: "Comfortaa",
+                                          height: 1,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                       const SizedBox(width: 5),
                                       Text(
                                         widget.fixture.time!.startingAt!.time!
                                             .substring(0, 5),
                                         style: const TextStyle(
-                                            fontFamily: "Comfortaa",
-                                            height: 1,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600),
+                                          fontFamily: "Comfortaa",
+                                          height: 1,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                       const SizedBox(width: 5),
                                       Text(
@@ -174,10 +181,11 @@ class _FixtureCardState extends State<FixtureCard> {
                                                 .timezone ??
                                             "",
                                         style: const TextStyle(
-                                            fontFamily: "Comfortaa",
-                                            height: 1,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600),
+                                          fontFamily: "Comfortaa",
+                                          height: 1,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -199,16 +207,17 @@ class _FixtureCardState extends State<FixtureCard> {
                                       const SizedBox(width: 5),
                                       SizedBox(
                                         width: Helper.setWidth(context,
-                                            factor: 0.5),
+                                            factor: 0.46),
                                         child: Text(
                                           widget.fixture.venue!.data!.name ??
                                               "",
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
-                                              fontFamily: "Comfortaa",
-                                              height: 1,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600),
+                                            fontFamily: "Comfortaa",
+                                            height: 1,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -228,10 +237,11 @@ class _FixtureCardState extends State<FixtureCard> {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                      fontFamily: "Comfortaa",
-                                      height: 1.5,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600),
+                                    fontFamily: "Comfortaa",
+                                    height: 1.5,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               )
                             : Padding(
@@ -243,7 +253,7 @@ class _FixtureCardState extends State<FixtureCard> {
                                     fontFamily: "Comfortaa",
                                     fontSize: 16,
                                     color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
@@ -253,7 +263,7 @@ class _FixtureCardState extends State<FixtureCard> {
                 ),
               ),
               Align(
-                alignment: const Alignment(-1, 0),
+                alignment: const Alignment(-1, -0.4),
                 child: Container(
                   margin: const EdgeInsets.only(top: 10.0),
                   decoration: BoxDecoration(
@@ -285,7 +295,7 @@ class _FixtureCardState extends State<FixtureCard> {
                 ),
               ),
               Align(
-                alignment: const Alignment(1, 0),
+                alignment: const Alignment(1, -0.4),
                 child: Container(
                   margin: const EdgeInsets.only(top: 10.0),
                   decoration: BoxDecoration(

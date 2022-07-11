@@ -155,7 +155,9 @@ class Fixture {
         visitorTeam: TeamClass.fromJson(json["visitorTeam"]),
         tvstations: Tvstations.fromJson(json["tvstations"]),
         league: League.fromJson(json["league"]),
-        // referee: Referee.fromJson(json["referee"]) ,
+        referee: json.containsKey("referee")
+            ? Referee.fromJson(json["referee"])
+            : null,
         venue: Venue.fromJson(json["venue"]),
       );
 

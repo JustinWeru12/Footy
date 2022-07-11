@@ -5,7 +5,6 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:football/api/crud.dart';
 import 'package:football/classes/leagues.dart';
 import 'package:football/models/helper.dart';
-import 'package:football/pages/login/model/button.dart';
 import 'package:football/pages/profile/models/select_profile_picture.dart';
 import 'package:football/services/default_spacer.dart';
 import 'package:football/services/theme/footy_theme.dart';

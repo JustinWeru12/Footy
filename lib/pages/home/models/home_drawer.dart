@@ -10,6 +10,7 @@ import 'package:football/pages/leagues/leaguepage.dart';
 import 'package:football/pages/profile/profilepage.dart';
 import 'package:football/pages/settings/about_page.dart';
 import 'package:football/pages/settings/settings_page.dart';
+import 'package:football/pages/settings/upgrade.dart';
 import 'package:football/services/animations/shifted_position.dart';
 import 'package:football/services/config_cubit.dart';
 import 'package:football/services/default_spacer.dart';
@@ -240,8 +241,10 @@ class _Entries extends StatelessWidget {
       // verticalSpacer,
       FootballListCard(
           leading: const Icon(FeatherIcons.star),
-          title: const Text('pro'),
-          onTap: () {}),
+          title: const Text('pro & pro+'),
+          onTap: () {
+            Helper.slideToPage(context, const UpgradeScreen());
+          }),
       verticalSpacer,
       FootballListCard(
         leading: const Icon(FeatherIcons.info),

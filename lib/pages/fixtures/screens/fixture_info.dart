@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +10,8 @@ import 'package:football/widgets/footy_scaffold.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import '../../../widgets/widgets.dart';
+
 class FixtureInfo extends StatefulWidget {
   final Fixture fixture;
   const FixtureInfo({Key? key, required this.fixture}) : super(key: key);
@@ -16,16 +20,7 @@ class FixtureInfo extends StatefulWidget {
   State<FixtureInfo> createState() => _FixtureInfoState();
 }
 
-class _FixtureInfoState extends State<FixtureInfo>
-    with SingleTickerProviderStateMixin {
-  TabController? _tabController;
-
-  @override
-  void initState() {
-    _tabController = TabController(length: 2, vsync: this);
-    super.initState();
-  }
-
+class _FixtureInfoState extends State<FixtureInfo> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -85,11 +80,42 @@ class _FixtureInfoState extends State<FixtureInfo>
                   ),
                 ),
                 const Spacer(),
-                Text(
-                  "${widget.fixture.localTeam!.data!.name ?? " "} vs. ${widget.fixture.visitorTeam!.data!.name ?? " "}",
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                      fontFamily: "Comfortaa", fontWeight: FontWeight.w600),
+                Column(
+                  children: [
+                    Text(
+                      "${widget.fixture.localTeam!.data!.name ?? " "} vs. ${widget.fixture.visitorTeam!.data!.name ?? " "}",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontFamily: "Comfortaa",
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    if (widget.fixture.scores!.htScore != null ||
+                        widget.fixture.scores!.htScore != null) ...[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "HT : FT",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontFamily: "Comfortaa",
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Text(
+                        "(${widget.fixture.scores?.htScore ?? " "}) ${widget.fixture.scores?.ftScore ?? " "}",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontFamily: "Comfortaa",
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ],
                 ),
                 const Spacer(),
                 Container(
@@ -133,36 +159,35 @@ class _FixtureInfoState extends State<FixtureInfo>
   }
 
   Widget tabBar() {
-    return TabBar(
-      controller: _tabController,
-      isScrollable: true,
-      // labelColor: Theme.of(context).colorScheme.tertiary,
-      unselectedLabelColor: Theme.of(context).colorScheme.secondary,
-      labelStyle: Theme.of(context).textTheme.headline6!.copyWith(
-            fontFamily: "Comfortaa",
-            fontWeight: FontWeight.w700,
-          ),
-      unselectedLabelStyle: const TextStyle(
-        fontSize: 13,
-        fontWeight: FontWeight.w700,
+    TextStyle style = TextStyle(
         fontFamily: "Comfortaa",
-      ),
-      indicatorSize: TabBarIndicatorSize.tab,
-      indicatorPadding: const EdgeInsets.symmetric(horizontal: 2.0),
-      indicator: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(10)),
+        fontWeight: FontWeight.w700,
+        fontSize: 15,
+        color: Theme.of(context).colorScheme.background);
+    return FootballTabBar(
       tabs: [
-        SizedBox(
-          width: Helper.setWidth(context, factor: 0.45),
-          child: const Tab(
-            text: "Info",
+        FootballTab(
+          icon: const Icon(
+            FeatherIcons.info,
+            size: 18,
+          ),
+          selectedCardColor: Theme.of(context).primaryColor,
+          selectedForegroundColor: Theme.of(context).colorScheme.background,
+          text: Text(
+            "Info",
+            style: style,
           ),
         ),
-        SizedBox(
-          width: Helper.setWidth(context, factor: 0.45),
-          child: const Tab(
-            text: "TV Stations",
+        FootballTab(
+          icon: const Icon(
+            FeatherIcons.tv,
+            size: 18,
+          ),
+          selectedCardColor: Theme.of(context).primaryColor,
+          selectedForegroundColor: Theme.of(context).colorScheme.background,
+          text: Text(
+            "TV Stations",
+            style: style,
           ),
         ),
       ],
@@ -173,7 +198,6 @@ class _FixtureInfoState extends State<FixtureInfo>
     return SizedBox(
       height: Helper.setHeight(context, factor: 0.71),
       child: TabBarView(
-        controller: _tabController,
         children: [
           info(),
           stations(),
@@ -302,6 +326,32 @@ class _FixtureInfoState extends State<FixtureInfo>
                   const SizedBox(width: 10),
                   Text(
                     widget.fixture.venue!.data!.name ?? "",
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontFamily: "Comfortaa",
+                        height: 1,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+            smallVerticalSpacer,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    "assets/icons/referee.svg",
+                    fit: BoxFit.contain,
+                    color: Theme.of(context).primaryColor,
+                    height: 16,
+                    width: 16,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    widget.fixture.referee?.data?.fullname ?? "Not found",
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                         fontFamily: "Comfortaa",

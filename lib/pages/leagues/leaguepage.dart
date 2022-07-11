@@ -58,7 +58,7 @@ class _LeaguePageState extends State<LeaguePage> {
                                     return InkWell(
                                       onTap: () {
                                         if (fixtures != null) {
-                                          Helper.scaleToPage(
+                                          Helper.slideToPage(
                                               context,
                                               FixtureByLeaguePage(
                                                   league:
@@ -70,7 +70,7 @@ class _LeaguePageState extends State<LeaguePage> {
                                                 crudObj.getFixturebyDateRange(
                                                     sDate, eDate);
                                             fixtures!.whenComplete(() =>
-                                                Helper.scaleToPage(
+                                                Helper.slideToPage(
                                                     context,
                                                     FixtureByLeaguePage(
                                                         league: snapshot
