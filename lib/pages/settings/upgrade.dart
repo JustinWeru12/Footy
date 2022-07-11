@@ -31,33 +31,24 @@ class _UpgradeScreenState extends State<UpgradeScreen>
     return DefaultTabController(
         length: 2,
         child: FootballScaffold(
-            title: "Upgrade",
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 15.0),
-                    child: ClipRRect(
-                      borderRadius: kBorderRadius,
-                      child: FootballListCard(
-                          contentPadding: EdgeInsets.zero,
-                          title: Column(
-                            children: [
-                              tabBar(),
-                              const Divider(
-                                height: 2,
-                                thickness: 2,
-                              ),
-                              tabView(context),
-                            ],
-                          )),
+          title: "Upgrade",
+          body: SingleChildScrollView(
+            child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    tabBar(),
+                    const Divider(
+                      height: 2,
+                      thickness: 2,
                     ),
-                  )
-                ],
-              ),
-            )));
+                    tabView(context),
+                  ],
+                )),
+          ),
+        ));
   }
 
   Widget tabBar() {
@@ -65,11 +56,11 @@ class _UpgradeScreenState extends State<UpgradeScreen>
       padding: EdgeInsets.all(8.0),
       tabs: [
         FootballTab(
-          icon: Icon(FeatherIcons.feather),
+          icon: Icon(Icons.star_rounded),
           text: Text("Pro+"),
         ),
         FootballTab(
-          icon: Icon(FeatherIcons.star),
+          icon: Icon(Icons.star_outline_rounded),
           text: Text("Pro"),
         ),
       ],
@@ -80,7 +71,8 @@ class _UpgradeScreenState extends State<UpgradeScreen>
     return Container(
       constraints: const BoxConstraints(maxHeight: 670),
       child: TabBarView(
-        children: [ Column(
+        children: [
+          Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               itemLabel(context, "Pro+ includes all Pro tier features"),
@@ -139,7 +131,6 @@ class _UpgradeScreenState extends State<UpgradeScreen>
               buttonPro()
             ],
           ),
-         
         ],
       ),
     );
@@ -178,7 +169,7 @@ class _UpgradeScreenState extends State<UpgradeScreen>
   }
 
   Widget buttonPro() {
-    final footyTheme = context.watch<FootballTheme>();
+    // final footyTheme = context.watch<FootballTheme>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -186,14 +177,15 @@ class _UpgradeScreenState extends State<UpgradeScreen>
           padding: const EdgeInsets.all(8.0),
           child: FootballButton.raised(
             onTap: () {},
-            backgroundColor:Theme.of(context).cardColor,
+            backgroundColor: Theme.of(context).cardColor,
             text: Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text("Subscribe",
                     style: Theme.of(context).textTheme.headline6!.copyWith(
                         fontWeight: FontWeight.w600,
-                        fontSize: 16 )),
+                        color: Theme.of(context).backgroundColor,
+                        fontSize: 16)),
               ),
             ),
           ),
@@ -203,7 +195,7 @@ class _UpgradeScreenState extends State<UpgradeScreen>
   }
 
   Widget buttonProPlus() {
-    final footyTheme = context.watch<FootballTheme>();
+    // final footyTheme = context.watch<FootballTheme>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Padding(
@@ -280,22 +272,24 @@ class _UpgradeScreenState extends State<UpgradeScreen>
               children: [
                 FootballButton.raised(
                   onTap: () {},
-                  backgroundColor: footyTheme.alternateCardColor,
+                  backgroundColor: Theme.of(context).cardColor,
                   text: Text("Subscribe",
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Theme.of(context).cardColor)),
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).backgroundColor,
+                            fontSize: 16,
+                          )),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 FootballButton.raised(
                   onTap: () {},
-                  backgroundColor: footyTheme.alternateCardColor,
+                  backgroundColor: Theme.of(context).cardColor,
                   text: Text("Subscribe",
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Theme.of(context).cardColor)),
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).backgroundColor,
+                            fontSize: 16,
+                          )),
                 ),
               ],
             ),
@@ -306,7 +300,7 @@ class _UpgradeScreenState extends State<UpgradeScreen>
   }
 
   Widget proPlusLifetime() {
-    final footyTheme = context.watch<FootballTheme>();
+    // final footyTheme = context.watch<FootballTheme>();
     return Column(
       children: [
         Padding(
@@ -371,7 +365,7 @@ class _UpgradeScreenState extends State<UpgradeScreen>
           padding: const EdgeInsets.all(8.0),
           child: FootballButton.raised(
             onTap: () {},
-            backgroundColor: footyTheme.alternateCardColor,
+            backgroundColor: Theme.of(context).cardColor,
             text: SizedBox(
               width: Helper.setWidth(context),
               child: Center(
@@ -379,9 +373,10 @@ class _UpgradeScreenState extends State<UpgradeScreen>
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Text("Upgrade",
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Theme.of(context).cardColor)),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Theme.of(context).backgroundColor,
+                          )),
                 ),
               ),
             ),

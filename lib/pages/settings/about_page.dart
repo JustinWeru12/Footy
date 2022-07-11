@@ -230,19 +230,29 @@ class _AboutPageState extends State<AboutPage> {
                   .copyWith(fontFamily: "Comfortaa"),
             ),
             smallVerticalSpacer,
-            FootballListTile(
-              leading: Icon(
-                FeatherIcons.star,
-                color: Theme.of(context).colorScheme.primary,
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: kBorderRadius,
               ),
-              title: Text("Upgrade to Pro or Pro+",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  )),
-              onTap: () {
-                Helper.slideToPage(context, const UpgradeScreen());
-              },
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              child: FootballListTile(
+                contentPadding: const EdgeInsets.all(0),
+                leadingPadding: const EdgeInsets.all(8.0),
+                leading: Icon(
+                  Icons.star_border_rounded,
+                  size: 20,
+                  color: Theme.of(context).backgroundColor,
+                ),
+                title: Text("Upgrade to Pro or Pro+",
+                    style: TextStyle(
+                      color: Theme.of(context).backgroundColor,
+                      fontWeight: FontWeight.bold,
+                    )),
+                onTap: () {
+                  Helper.slideToPage(context, const UpgradeScreen());
+                },
+              ),
             ),
             smallVerticalSpacer,
           ],

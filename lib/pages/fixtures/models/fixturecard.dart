@@ -1,11 +1,16 @@
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:football/classes/fixtures.dart';
 import 'package:football/models/helper.dart';
 import 'package:football/pages/fixtures/screens/fixture_info.dart';
+import 'package:football/services/default_spacer.dart';
 import 'package:football/services/theme/footy_theme.dart';
+import 'package:football/widgets/footy_list_card.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/timezone.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class FixtureCard extends StatefulWidget {
@@ -21,6 +26,9 @@ class FixtureCard extends StatefulWidget {
 }
 
 class _FixtureCardState extends State<FixtureCard> {
+  final DeviceCalendarPlugin _deviceCalendarPlugin = DeviceCalendarPlugin();
+  List<Calendar> _calendars = [];
+
   showInSnackBar(context, value) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
@@ -44,6 +52,38 @@ class _FixtureCardState extends State<FixtureCard> {
       names.add(stations[i].tvstation!);
     }
     return names;
+  }
+
+  Future<List<Calendar>> _retrieveCalendars() async {
+    try {
+      var permissionsGranted = await _deviceCalendarPlugin.hasPermissions();
+      if (permissionsGranted.isSuccess &&
+          (permissionsGranted.data == null ||
+              permissionsGranted.data == false)) {
+        permissionsGranted = await _deviceCalendarPlugin.requestPermissions();
+        if (!permissionsGranted.isSuccess ||
+            permissionsGranted.data == null ||
+            permissionsGranted.data == false) {
+          return [];
+        }
+      }
+
+      final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
+      setState(() {
+        _calendars = calendarsResult.data as List<Calendar>;
+        print(
+            "Calendars: ${_calendars[_calendars.indexWhere((element) => element.isDefault!)].accountName}");
+      });
+      return calendarsResult.data as List<Calendar>;
+    } on PlatformException catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
+
+  addtoCalendar() {
+    DeviceCalendarPlugin().retrieveCalendars;
+    // DeviceCalendarPlugin().createOrUpdateEvent(Event())
   }
 
   @override
@@ -103,15 +143,16 @@ class _FixtureCardState extends State<FixtureCard> {
                               ),
                               const Spacer(),
                               InkWell(
-                                onTap: (() {
-                                  widget.onSaved ?? onSaved(context);
-                                }),
-                                child: SvgPicture.asset(
-                                  "assets/icons/save.svg",
-                                  fit: BoxFit.contain,
-                                  color: Theme.of(context).primaryColor,
-                                  height: 20,
-                                  width: 20,
+                                onTap: () {
+                                  _openMoreOptionsSheet(context);
+                                },
+                                child: SizedBox(
+                                  width: 20.0,
+                                  child: Icon(
+                                    Icons.more_vert,
+                                    color: Theme.of(context).primaryColor,
+                                    size: 20,
+                                  ),
                                 ),
                               ),
                             ],
@@ -331,5 +372,164 @@ class _FixtureCardState extends State<FixtureCard> {
         ),
       ),
     );
+  }
+
+  void _openMoreOptionsSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Container(
+            // height: MediaQuery.of(context).size.height * 0.4,
+            decoration: BoxDecoration(
+              color: Theme.of(context).canvasColor,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  smallVerticalSpacer,
+                  Container(
+                    width: Helper.setWidth(context, factor: 0.15),
+                    height: 5,
+                    decoration: BoxDecoration(
+                        borderRadius: kBorderRadius,
+                        color: Theme.of(context).cardColor.withOpacity(0.2)),
+                  ),
+                  verticalSpacer,
+                  FootballListCard(
+                      leading: const Icon(Icons.alarm_add_rounded),
+                      title: const Text('Reminder'),
+                      onTap: () {
+                        Navigator.pop(context, true);
+                      }),
+                  smallVerticalSpacer,
+                  FootballListCard(
+                      leading: const Icon(Icons.calendar_month_rounded),
+                      title: const Text('Calendar'),
+                      onTap: () {
+                        _retrieveCalendars().then((val) {
+                          Navigator.of(context).pop();
+                          _openCaledarOptionsSheet(context);
+                        });
+                      }),
+                  smallVerticalSpacer,
+                  FootballListCard(
+                      leading: const Icon(Icons.share_rounded),
+                      title: const Text('Share'),
+                      onTap: () {
+                        Navigator.pop(context, true);
+                      }),
+                  smallVerticalSpacer,
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void _openCaledarOptionsSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Container(
+              // height: MediaQuery.of(context).size.height * 0.4,
+              decoration: BoxDecoration(
+                color: Theme.of(context).canvasColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(25.0),
+                  topRight: Radius.circular(25.0),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    smallVerticalSpacer,
+                    Container(
+                      width: Helper.setWidth(context, factor: 0.15),
+                      height: 5,
+                      decoration: BoxDecoration(
+                          borderRadius: kBorderRadius,
+                          color: Theme.of(context).cardColor.withOpacity(0.2)),
+                    ),
+                    smallVerticalSpacer,
+                    if (_calendars.isEmpty)
+                      const FootballListCard(
+                        title: Text("There are no Compatible Calendars"),
+                      ),
+                    if (_calendars.isNotEmpty)
+                      Text("Select a Calendar",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(
+                                  fontSize: 16,
+                                  color: Theme.of(context).primaryColor)),
+                    smallVerticalSpacer,
+                    ...List.generate(
+                      _calendars.length,
+                      (int i) => Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: FootballListCard(
+                            title: Text(_calendars[i].name ?? ""),
+                            subtitle: Text(_calendars[i].accountName ?? ""),
+                            onTap: () async {
+                              DateTime matchDate = DateTime.utc(
+                                  widget.fixture.time!.startingAt!.date!.year,
+                                  widget.fixture.time!.startingAt!.date!.month,
+                                  widget.fixture.time!.startingAt!.date!.day,
+                                  int.tryParse(widget
+                                      .fixture.time!.startingAt!.time!
+                                      .substring(0, 2))!,
+                                  int.tryParse(widget
+                                      .fixture.time!.startingAt!.time!
+                                      .substring(3, 5))!);
+                              DateTime date = matchDate.toLocal();
+                              print(date.hour);
+                              var createEventResult =
+                                  await DeviceCalendarPlugin()
+                                      .createOrUpdateEvent(
+                                Event(
+                                  _calendars[i].id,
+                                  eventId: widget.fixture.id!.toString(),
+                                  title:
+                                      "${widget.fixture.localTeam!.data!.name ?? " "} vs. ${widget.fixture.visitorTeam!.data!.name ?? " "}",
+                                  start: TZDateTime.local(date.year, date.month,
+                                      date.day, date.hour, date.minute),
+                                  end: TZDateTime.local(
+                                    date.year,
+                                    date.month,
+                                    date.day,
+                                    date.hour,
+                                    date.minute,
+                                  ).add(Duration(
+                                      minutes:
+                                          widget.fixture.time!.minute ?? 90)),
+                                ),
+                              );
+                              if (createEventResult?.isSuccess == true) {
+                                Navigator.pop(context, true);
+                              } else {
+                                showInSnackBar(
+                                    context,
+                                    createEventResult?.errors
+                                        .map((err) =>
+                                            '[${err.errorCode}] ${err.errorMessage}')
+                                        .join(' | ') as String);
+                              }
+                            }),
+                      ),
+                    ),
+                  ]),
+                ),
+              ));
+        });
   }
 }

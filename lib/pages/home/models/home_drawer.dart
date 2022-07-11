@@ -213,11 +213,6 @@ class _Entries extends StatelessWidget {
           }),
       verticalSpacer,
       FootballListCard(
-          leading: const Icon(CupertinoIcons.search),
-          title: const Text('search'),
-          onTap: () {}),
-      verticalSpacer,
-      FootballListCard(
         leading: SvgPicture.asset(
           "assets/icons/trophy.svg",
           fit: BoxFit.contain,
