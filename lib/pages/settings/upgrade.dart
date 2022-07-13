@@ -38,7 +38,6 @@ class _UpgradeScreenState extends State<UpgradeScreen>
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
                 child: Column(
                   children: [
-                    const SizedBox(height: 10),
                     tabBar(),
                     const Divider(
                       height: 2,
@@ -69,7 +68,7 @@ class _UpgradeScreenState extends State<UpgradeScreen>
 
   Widget tabView(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(maxHeight: 670),
+      constraints: const BoxConstraints(maxHeight: 750),
       child: TabBarView(
         children: [
           Column(
@@ -89,6 +88,7 @@ class _UpgradeScreenState extends State<UpgradeScreen>
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         fontWeight: FontWeight.w600,
+                        fontSize: 10,
                         height: 1.5,
                         fontFamily: "Comfortaa")),
               ),
@@ -205,35 +205,36 @@ class _UpgradeScreenState extends State<UpgradeScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  width: Helper.setWidth(context, factor: 0.44),
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text("€2.79\nEvery Month",
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          height: 1.5,
-                          fontFamily: "Comfortaa")),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text("€2.79\nEvery Month",
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            height: 1.5,
+                            fontFamily: "Comfortaa")),
+                  ),
                 ),
-                Container(
-                  width: Helper.setWidth(context, factor: 0.44),
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text("€5.49\nEvery 3 Months",
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          height: 1.5,
-                          fontFamily: "Comfortaa")),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text("€5.49\nEvery 3 Months",
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            height: 1.5,
+                            fontFamily: "Comfortaa")),
+                  ),
                 ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
-                  width: Helper.setWidth(context, factor: 0.44),
+                Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text("You will be charged €2.79 per month.",
@@ -247,13 +248,13 @@ class _UpgradeScreenState extends State<UpgradeScreen>
                 ),
                 SizedBox(
                   height: 40,
+                  width: 10,
                   child: VerticalDivider(
                       thickness: 1,
                       width: 2,
                       color: Theme.of(context).dividerColor.withOpacity(0.7)),
                 ),
-                SizedBox(
-                  width: Helper.setWidth(context, factor: 0.44),
+                Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text("You will be charged €5.49 every 3 months.",
@@ -277,10 +278,9 @@ class _UpgradeScreenState extends State<UpgradeScreen>
                       style: Theme.of(context).textTheme.headline6!.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Theme.of(context).backgroundColor,
-                            fontSize: 16,
+                            fontSize: 14,
                           )),
                 ),
-                const SizedBox(width: 20),
                 FootballButton.raised(
                   onTap: () {},
                   backgroundColor: Theme.of(context).cardColor,
@@ -288,7 +288,7 @@ class _UpgradeScreenState extends State<UpgradeScreen>
                       style: Theme.of(context).textTheme.headline6!.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Theme.of(context).backgroundColor,
-                            fontSize: 16,
+                            fontSize: 14,
                           )),
                 ),
               ],
@@ -359,6 +359,7 @@ class _UpgradeScreenState extends State<UpgradeScreen>
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   fontWeight: FontWeight.w600,
                   height: 1.5,
+                  fontSize: 10,
                   fontFamily: "Comfortaa")),
         ),
         Padding(

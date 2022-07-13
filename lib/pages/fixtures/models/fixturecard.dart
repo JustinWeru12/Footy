@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:football/classes/fixtures.dart';
+import 'package:football/classes/standings.dart' as st;
 import 'package:football/models/helper.dart';
 import 'package:football/pages/fixtures/screens/fixture_info.dart';
 import 'package:football/services/default_spacer.dart';
@@ -18,9 +19,11 @@ class FixtureCard extends StatefulWidget {
     Key? key,
     required this.fixture,
     this.onSaved,
+    required this.standings,
   }) : super(key: key);
   final Fixture fixture;
   final Function()? onSaved;
+  final st.Standings standings;
   @override
   State<FixtureCard> createState() => _FixtureCardState();
 }
@@ -93,7 +96,15 @@ class _FixtureCardState extends State<FixtureCard> {
       padding: const EdgeInsets.all(6.0),
       child: InkWell(
         onTap: () {
-          Helper.slideToPage(context, FixtureInfo(fixture: widget.fixture));
+          Helper.slideToPage(
+              context,
+              FixtureInfo(
+                fixture: widget.fixture,
+                standings: widget.standings,
+              ));
+        },
+        onLongPress: () {
+          _openMoreOptionsSheet(context);
         },
         child: SizedBox(
           height: 200,

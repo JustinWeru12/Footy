@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:football/classes/fixtures.dart';
 import 'package:football/classes/leagues.dart';
+import 'package:football/classes/standings.dart' as st;
 import 'package:http/http.dart' as http;
 
 class CrudMethods {
@@ -64,6 +65,26 @@ class CrudMethods {
     );
     if (response.statusCode == 200) {
       return FixtureList.fromJson(json.decode(response.body));
+    } else {
+      throw Exception("Error while fetching data: ${response.body}");
+    }
+  }
+
+  Future<st.Standings> getStrandingsbySeasonID(String id) async {
+    final queryParam = {
+      'api_token':
+          'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
+    };
+    http.Response response = await http.get(
+      Uri.https('soccer.sportmonks.com', '/api/v2.0/standings/season/$id',
+          queryParam),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+    if (response.statusCode == 200) {
+      return st.Standings.fromJson(json.decode(response.body));
     } else {
       throw Exception("Error while fetching data: ${response.body}");
     }

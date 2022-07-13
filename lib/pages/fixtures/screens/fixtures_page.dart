@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:football/classes/fixtures.dart';
+import 'package:football/classes/standings.dart' as st;
 import 'package:football/models/helper.dart';
+import 'package:football/models/placeholder.dart';
 import 'package:football/pages/fixtures/models/fixturecard.dart';
 import 'package:football/widgets/widgets.dart';
 import 'package:intl/intl.dart';
@@ -8,9 +10,14 @@ import 'package:rive/rive.dart';
 
 class FixturesPage extends StatefulWidget {
   final Future<FixtureList> fixtures;
+  final st.Standings standings;
   final DateTime date;
 
-  const FixturesPage({Key? key, required this.fixtures, required this.date})
+  const FixturesPage(
+      {Key? key,
+      required this.fixtures,
+      required this.date,
+      required this.standings})
       : super(key: key);
 
   @override
@@ -74,18 +81,14 @@ class _FixturesPageState extends State<FixturesPage> {
                                   itemBuilder: (context, i) {
                                     return isThisDate(snapshot, i)
                                         ? FixtureCard(
-                                            fixture: snapshot.data!.data[i])
+                                            fixture: snapshot.data!.data[i],
+                                            standings: widget.standings,
+                                          )
                                         : Container();
                                   }),
                         )
-                      : Center(
-                          child: Text("No Fixtures for this Date",
-                              style: TextStyle(
-                                  fontFamily: "Comfortaa",
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20)),
-                        );
+                      : const PlaceholderWidget(
+                          label: "Sorry, no fixtures for this day");
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Text(snapshot.error.toString(),

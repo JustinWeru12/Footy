@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:football/classes/leagues.dart';
+import 'package:football/classes/standings.dart';
 import 'package:football/models/helper.dart';
 import 'package:football/pages/home/models/home_content_padding.dart';
 import 'package:football/pages/leagues/leaguepage.dart';
@@ -31,12 +33,16 @@ class HomeDrawer extends StatelessWidget {
       {Key? key,
       this.auth,
       required this.logoutCallback,
-      required this.userData})
+      required this.userData,
+      required this.leagues,
+      required this.standings})
       : super(key: key);
 
   final BaseAuth? auth;
   final VoidCallback logoutCallback;
   final UserData userData;
+  final LeagueList leagues;
+  final Standings standings;
   @override
   Widget build(BuildContext context) {
     final config = context.watch<ConfigCubit>().state;
@@ -52,7 +58,14 @@ class HomeDrawer extends StatelessWidget {
             _AuthenticatedUser(userData),
             verticalSpacer,
             verticalSpacer,
-            _Entries(animationController, auth, logoutCallback, userData),
+            _Entries(
+              controller: animationController,
+              auth: auth,
+              logoutCallback: logoutCallback,
+              userData: userData,
+              leagues: leagues,
+              standings: standings,
+            ),
             const HomeBottomPadding(),
           ],
         );
@@ -168,13 +181,21 @@ class _AuthenticatedUser extends StatelessWidget {
 }
 
 class _Entries extends StatelessWidget {
-  const _Entries(
-      this.controller, this.auth, this.logoutCallback, this.userData);
+  const _Entries({
+    required this.controller,
+    required this.auth,
+    required this.logoutCallback,
+    required this.userData,
+    required this.leagues,
+    required this.standings,
+  });
 
   final AnimationController controller;
   final BaseAuth? auth;
   final VoidCallback logoutCallback;
   final UserData userData;
+  final LeagueList leagues;
+  final Standings standings;
 
   List<Widget> _animate(List<Widget> children) {
     final animated = <Widget>[];
@@ -222,7 +243,12 @@ class _Entries extends StatelessWidget {
         ),
         title: const Text('leagues'),
         onTap: () => {
-          Helper.slideToPage(context, const LeaguePage()),
+          Helper.slideToPage(
+              context,
+              LeaguePage(
+                leagues: leagues,
+                standings: standings,
+              )),
         },
       ),
       verticalSpacer,
