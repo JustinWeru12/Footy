@@ -9,6 +9,8 @@ import 'package:football/models/placeholder.dart';
 import 'package:football/services/default_spacer.dart';
 import 'package:football/classes/standings.dart' as st;
 import 'package:football/services/theme/footy_theme.dart';
+import 'package:football/widgets/footy_list_tile.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -25,43 +27,141 @@ class FixtureInfo extends StatefulWidget {
 }
 
 class _FixtureInfoState extends State<FixtureInfo> {
+  bool isPast = false;
+
   @override
   void initState() {
+    isPast =
+        widget.fixture.scores != null && widget.fixture.scores!.ftScore != null;
     super.initState();
-    debugPrint(widget.standings.data!.length.toString());
+  }
+
+  List<LineupDatum> getPlayerRow(int teamId) {
+    return widget.fixture.lineup!.data!
+        .where((element) => element.teamId == teamId)
+        .toList();
+  }
+
+  String getPosition(Position? position) {
+    switch (position) {
+      case Position.G:
+        return "Goalkeeper";
+      case Position.D:
+        return "Defender";
+      case Position.M:
+        return "Midfielder";
+      case null:
+        return "Player";
+      default:
+        return "Attacking Midfielder";
+    }
+  }
+
+  List<String>? getLocallength() {
+    return widget.fixture.formations?.localteamFormation
+        ?.replaceAll(" ", "")
+        .split("-");
+  }
+
+  List<String>? getVisitorlength() {
+    return widget.fixture.formations?.visitorteamFormation
+        ?.replaceAll(" ", "")
+        .split("-");
+  }
+
+  int getLocalCurrIndex(int i) {
+    switch (i) {
+      case 0:
+        return 1;
+      case 1:
+        return int.tryParse(getLocallength()![i - 1])! + 1;
+      case 2:
+        return int.tryParse(getLocallength()![i - 1])! +
+            int.tryParse(getLocallength()![i - 2])! +
+            1;
+      case 3:
+        return int.tryParse(getLocallength()![i - 1])! +
+            int.tryParse(getLocallength()![i - 2])! +
+            int.tryParse(getLocallength()![i - 3])! +
+            1;
+      case 4:
+        return int.tryParse(getLocallength()![i - 1])! +
+            int.tryParse(getLocallength()![i - 2])! +
+            int.tryParse(getLocallength()![i - 3])! +
+            int.tryParse(getLocallength()![i - 4])! +
+            1;
+      default:
+        return int.tryParse(getLocallength()![i - 1])! +
+            int.tryParse(getLocallength()![i - 2])! +
+            int.tryParse(getLocallength()![i - 3])! +
+            int.tryParse(getLocallength()![i - 4])! +
+            int.tryParse(getLocallength()![i - 5])! +
+            1;
+    }
+  }
+
+  int getVisitorCurrIndex(int i) {
+    switch (i) {
+      case 0:
+        return 1;
+      case 1:
+        return int.tryParse(getVisitorlength()![i - 1])! + 1;
+      case 2:
+        return int.tryParse(getVisitorlength()![i - 1])! +
+            int.tryParse(getVisitorlength()![i - 2])! +
+            1;
+      case 3:
+        return int.tryParse(getVisitorlength()![i - 1])! +
+            int.tryParse(getVisitorlength()![i - 2])! +
+            int.tryParse(getVisitorlength()![i - 3])! +
+            1;
+      case 4:
+        return int.tryParse(getVisitorlength()![i - 1])! +
+            int.tryParse(getVisitorlength()![i - 2])! +
+            int.tryParse(getVisitorlength()![i - 3])! +
+            int.tryParse(getVisitorlength()![i - 4])! +
+            1;
+      default:
+        return int.tryParse(getVisitorlength()![i - 1])! +
+            int.tryParse(getVisitorlength()![i - 2])! +
+            int.tryParse(getVisitorlength()![i - 3])! +
+            int.tryParse(getVisitorlength()![i - 4])! +
+            int.tryParse(getVisitorlength()![i - 5])! +
+            1;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 5,
       child: FootballScaffold(
           title: "Fixture",
-          body: Column(
-            children: [
-              const Divider(),
-              header(),
-              tabView(),
-            ],
+          body: SizedBox(
+            height: Helper.setHeight(context),
+            child: Column(
+              children: [
+                header(),
+                tabView(),
+              ],
+            ),
           )),
     );
   }
 
   Widget header() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-      // decoration: const BoxDecoration(color: kWhiteColor, boxShadow: [
-      //   BoxShadow(color: Colors.grey, offset: Offset(5, 5), blurRadius: 7)
-      // ]),
+      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+            width: Helper.setWidth(context),
             child: Row(
               children: [
                 Container(
-                  margin: const EdgeInsets.only(top: 10.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     color: Colors.white,
@@ -78,8 +178,8 @@ class _FixtureInfoState extends State<FixtureInfo> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: SizedBox(
-                      width: Helper.setWidth(context, factor: 0.15),
-                      height: Helper.setWidth(context, factor: 0.15),
+                      width: Helper.setWidth(context, factor: 0.13),
+                      height: Helper.setWidth(context, factor: 0.13),
                       child: FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
                         image: widget.fixture.localTeam!.data!.logoPath ??
@@ -92,14 +192,18 @@ class _FixtureInfoState extends State<FixtureInfo> {
                 const Spacer(),
                 Column(
                   children: [
-                    Text(
-                      "${widget.fixture.localTeam!.data!.name ?? " "} vs. ${widget.fixture.visitorTeam!.data!.name ?? " "}",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontFamily: "Comfortaa",
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600),
+                    SizedBox(
+                      width: Helper.setWidth(context, factor: 0.57),
+                      child: Text(
+                        "${widget.fixture.localTeam!.data!.name ?? " "} vs. ${widget.fixture.visitorTeam!.data!.name ?? " "}",
+                        overflow: TextOverflow.clip,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontFamily: "Comfortaa",
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600),
+                      ),
                     ),
                     if (widget.fixture.scores!.htScore != null ||
                         widget.fixture.scores!.htScore != null) ...[
@@ -129,7 +233,6 @@ class _FixtureInfoState extends State<FixtureInfo> {
                 ),
                 const Spacer(),
                 Container(
-                  margin: const EdgeInsets.only(top: 10.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     color: Colors.white,
@@ -146,8 +249,8 @@ class _FixtureInfoState extends State<FixtureInfo> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: SizedBox(
-                      width: Helper.setWidth(context, factor: 0.15),
-                      height: Helper.setWidth(context, factor: 0.15),
+                      width: Helper.setWidth(context, factor: 0.13),
+                      height: Helper.setWidth(context, factor: 0.13),
                       child: FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
                         image: widget.fixture.visitorTeam!.data!.logoPath ??
@@ -162,54 +265,58 @@ class _FixtureInfoState extends State<FixtureInfo> {
           ),
           const Divider(),
           tabBar(),
-          SizedBox(height: Helper.setHeight(context, factor: 0.01)),
+          // SizedBox(height: Helper.setHeight(context, factor: 0.01)),
         ],
       ),
     );
   }
 
   Widget tabBar() {
-    TextStyle style = TextStyle(
-        fontFamily: "Comfortaa",
-        fontWeight: FontWeight.w700,
-        fontSize: 15,
-        color: Theme.of(context).colorScheme.background);
-    return FootballTabBar(
+    return const FootballTabBar(
       tabs: [
         FootballTab(
-          icon: const Icon(
+          icon: Icon(
             FeatherIcons.tv,
             size: 18,
           ),
-          selectedCardColor: Theme.of(context).primaryColor,
-          selectedForegroundColor: Theme.of(context).colorScheme.background,
           text: Text(
             "TV Stations",
-            style: style,
           ),
         ),
         FootballTab(
-          icon: const Icon(
+          icon: Icon(
             FeatherIcons.info,
             size: 18,
           ),
-          selectedCardColor: Theme.of(context).primaryColor,
-          selectedForegroundColor: Theme.of(context).colorScheme.background,
           text: Text(
             "Info",
-            style: style,
           ),
         ),
         FootballTab(
-          icon: const Icon(
+          icon: Icon(
             Icons.table_chart_outlined,
             size: 18,
           ),
-          selectedCardColor: Theme.of(context).primaryColor,
-          selectedForegroundColor: Theme.of(context).colorScheme.background,
           text: Text(
             "Table",
-            style: style,
+          ),
+        ),
+        FootballTab(
+          icon: Icon(
+            Icons.people_alt_outlined,
+            size: 18,
+          ),
+          text: Text(
+            "Lineup",
+          ),
+        ),
+        FootballTab(
+          icon: Icon(
+            FeatherIcons.activity,
+            size: 18,
+          ),
+          text: Text(
+            "Events",
           ),
         ),
       ],
@@ -217,13 +324,14 @@ class _FixtureInfoState extends State<FixtureInfo> {
   }
 
   Widget tabView() {
-    return SizedBox(
-      height: Helper.setHeight(context, factor: 0.71),
+    return Expanded(
       child: TabBarView(
         children: [
           stations(),
           info(),
           table(),
+          lineup(),
+          events(),
         ],
       ),
     );
@@ -357,7 +465,7 @@ class _FixtureInfoState extends State<FixtureInfo> {
                       ),
                     )
                   : const PlaceholderWidget(
-                      label: "Sorry,No coverage listed for this fixture");
+                      label: "Sorry, no coverage listed for this fixture.");
             }),
       ),
     );
@@ -398,14 +506,14 @@ class _FixtureInfoState extends State<FixtureInfo> {
                 ? TableRow(
                     children: [
                       label("Club"),
-                      label("MP"),
+                      label("M"),
                       label("W"),
                       label("D"),
                       label("L"),
                       label("GF"),
                       label("GA"),
                       label("GD"),
-                      label("Pts"),
+                      label("Pt"),
                     ],
                   )
                 : TableRow(
@@ -454,7 +562,7 @@ class _FixtureInfoState extends State<FixtureInfo> {
       padding: const EdgeInsets.all(5.0),
       child: Center(
         child: Text(text,
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.center),
       ),
     );
@@ -466,6 +574,484 @@ class _FixtureInfoState extends State<FixtureInfo> {
       child: Text(text,
           style: Theme.of(context).textTheme.bodyLarge,
           textAlign: TextAlign.left),
+    );
+  }
+
+  Widget lineup() {
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      // physics: const NeverScrollableScrollPhysics(),
+      child: widget.fixture.lineup!.data!.isNotEmpty
+          ? Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipRRect(
+                    borderRadius: kBorderRadius,
+                    child: SvgPicture.asset(
+                      "assets/icons/pitch.svg",
+                      width: Helper.setWidth(context),
+                      height: Helper.setWidth(context) * 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: Helper.setWidth(context) * 2,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: Helper.setWidth(context) * 1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            smallVerticalSpacer,
+                            formation(
+                                widget.fixture.formations?.localteamFormation ??
+                                    ""),
+                            lineUpRow(1, 0,
+                                getPlayerRow(widget.fixture.localteamId!)),
+                            ...List.generate(
+                              widget.fixture.formations!.localteamFormation!
+                                  .split("-")
+                                  .length,
+                              (int i) => lineUpRow(
+                                  int.tryParse(getLocallength()![i])!,
+                                  getLocalCurrIndex(i),
+                                  getPlayerRow(widget.fixture.localteamId!)),
+                            ),
+                            smallVerticalSpacer,
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: Helper.setWidth(context) * 1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            smallVerticalSpacer,
+                            ...List.generate(
+                              widget.fixture.formations!.visitorteamFormation!
+                                  .split("-")
+                                  .length,
+                              (int i) => lineUpRow(
+                                  int.tryParse(getVisitorlength()![i])!,
+                                  getVisitorCurrIndex(i),
+                                  getPlayerRow(widget.fixture.visitorteamId!)),
+                            ).reversed,
+                            lineUpRow(1, 0,
+                                getPlayerRow(widget.fixture.visitorteamId!)),
+                            smallVerticalSpacer,
+                            formation(widget
+                                    .fixture.formations?.visitorteamFormation ??
+                                ""),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          : const PlaceholderWidget(
+              label: "Sorry, lineup not available for this fixture yet."),
+    );
+  }
+
+  Widget formation(String title) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Comfortaa",
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget lineUpRow(int length, int start, List<LineupDatum> players) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(
+        length,
+        (int i) => player(players[i + start]),
+      ),
+    );
+  }
+
+  Widget player(LineupDatum element) {
+    bool isLocal = element.teamId == widget.fixture.localteamId;
+    return Column(
+      children: [
+        SizedBox(
+          height: Helper.setWidth(context, factor: 0.1),
+          width: Helper.setWidth(context, factor: 0.1),
+          child: Stack(
+            children: [
+              Container(
+                height: Helper.setWidth(context, factor: 0.1),
+                width: Helper.setWidth(context, factor: 0.1),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.white.withOpacity(1)),
+                child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: ClipOval(
+                    // radius: Helper.setWidth(context, factor: 0.12),
+                    child: SvgPicture.asset(
+                      "assets/icons/person.svg",
+                      height: Helper.setWidth(context, factor: 0.12),
+                      width: Helper.setWidth(context, factor: 0.12),
+                      color: isLocal
+                          ? Color(int.parse((widget
+                                  .fixture.colors?.localteam?.color
+                                  ?.replaceAll('#', '0xff')) ??
+                              "0xFF000000"))
+                          : Color(int.parse((widget
+                                  .fixture.colors?.visitorteam?.color
+                                  ?.replaceAll('#', '0xff')) ??
+                              "0xFF000000")),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
+              if (element.captain!)
+                Align(
+                  alignment: const Alignment(1, 1),
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).backgroundColor,
+                        shape: BoxShape.circle),
+                    child: Center(
+                      child: Text(
+                        "C",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: "Comfortaa",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            element.playerName!.contains("")
+                ? element.playerName?.split(" ").first ?? ""
+                : element.playerName ?? "",
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Comfortaa",
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget events() {
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      // physics: const NeverScrollableScrollPhysics(),
+      child: widget.fixture.events!.data!.isNotEmpty
+          ? MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: ListView.builder(
+                  itemCount: widget.fixture.events!.data!.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  reverse: true,
+                  itemBuilder: (context, i) {
+                    return getEventWidget(widget.fixture.events!.data![i].type,
+                        widget.fixture.events!.data![i]);
+                  }),
+            )
+          : const PlaceholderWidget(
+              label: "Sorry, no events listed for this fixture."),
+    );
+  }
+
+  Widget getEventWidget(PurpleType? purpleType, EventsDatum event) {
+    switch (purpleType) {
+      case PurpleType.GOAL:
+        return eventCard(
+            event.playerName ?? "",
+            event.relatedPlayerName != null
+                ? "(${event.relatedPlayerName})"
+                : "",
+            "${event.minute ?? ""}'",
+            "assets/icons/football.svg",
+            Theme.of(context).cardColor,
+            event.teamId == widget.fixture.localteamId.toString());
+      case PurpleType.OWN_GOAL:
+        return eventCard(
+            event.playerName ?? "",
+            "(OG)",
+            "${event.minute ?? ""}'",
+            "assets/icons/football.svg",
+            Theme.of(context).cardColor,
+            event.teamId == widget.fixture.localteamId.toString());
+      case PurpleType.PENALTY:
+        return eventCard(
+            event.playerName ?? "",
+            event.result ?? "",
+            "${event.minute ?? ""}'",
+            "assets/icons/penalty.svg",
+            Theme.of(context).cardColor,
+            event.teamId == widget.fixture.localteamId.toString());
+      case PurpleType.REDCARD:
+        return eventCard(
+            event.playerName ?? "",
+            event.reason ?? "",
+            "${event.minute ?? ""}'",
+            "assets/icons/redcard.svg",
+            null,
+            event.teamId == widget.fixture.localteamId.toString());
+
+      case PurpleType.SUBSTITUTION:
+        return substitutionCard(
+            event.playerName ?? "",
+            event.relatedPlayerName ?? "",
+            "${event.minute ?? ""}'",
+            "assets/icons/substitution.svg",
+            const Color(0xFF23DE71),
+            const Color(0xFFFE0000),
+            event.teamId == widget.fixture.localteamId.toString());
+
+      case PurpleType.VAR:
+        return eventCard(
+            event.playerName ?? "",
+            event.relatedPlayerName ?? "",
+            "${event.minute ?? ""}'",
+            "assets/icons/tv.svg",
+            Theme.of(context).cardColor,
+            event.teamId == widget.fixture.localteamId.toString());
+      case PurpleType.YELLOWCARD:
+        return eventCard(
+            event.playerName ?? event.relatedPlayerName ?? "",
+            event.reason ?? "",
+            "${event.minute ?? ""}'",
+            "assets/icons/yellowcard.svg",
+            null,
+            event.teamId == widget.fixture.localteamId.toString());
+
+      case PurpleType.YELLOWRED:
+        return eventCard(
+            event.playerName ?? "",
+            event.reason ?? "",
+            "${event.minute ?? ""}'",
+            "assets/icons/yellowred.svg",
+            null,
+            event.teamId == widget.fixture.localteamId.toString());
+
+      default:
+        return Container();
+    }
+  }
+
+  Widget eventCard(String title, String subTitle, String time, String asset,
+      Color? color, bool isHome) {
+    return Padding(
+      padding: const EdgeInsets.all(6.0),
+      child: SizedBox(
+        width: Helper.setWidth(context),
+        child: FootballListCard(
+          contentPadding: EdgeInsets.zero,
+          title: Row(
+            children: [
+              isHome
+                  ? SizedBox(
+                      width: Helper.setWidth(context, factor: 0.4),
+                      child: FootballListTile(
+                        leading: SvgPicture.asset(
+                          asset,
+                          fit: BoxFit.contain,
+                          color: color,
+                          height: 20,
+                          width: 20,
+                        ),
+                        title: Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                          ),
+                        ),
+                        subtitle: Text(
+                          subTitle,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: Helper.setWidth(context, factor: 0.4),
+                    ),
+              Expanded(
+                child: Center(
+                  child: Text(
+                    time,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: "Comfortaa",
+                    ),
+                  ),
+                ),
+              ),
+              !isHome
+                  ? SizedBox(
+                      width: Helper.setWidth(context, factor: 0.4),
+                      child: FootballListTile(
+                        leading: SvgPicture.asset(
+                          asset,
+                          fit: BoxFit.contain,
+                          color: color,
+                          height: 20,
+                          width: 20,
+                        ),
+                        title: Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                          ),
+                        ),
+                        subtitle: Text(
+                          subTitle,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: Helper.setWidth(context, factor: 0.4),
+                    ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget substitutionCard(String title, String subTitle, String time,
+      String asset, Color primary, Color secondary, bool isHome) {
+    return Padding(
+      padding: const EdgeInsets.all(6.0),
+      child: SizedBox(
+        width: Helper.setWidth(context),
+        child: FootballListCard(
+          contentPadding: EdgeInsets.zero,
+          title: Row(
+            children: [
+              isHome
+                  ? SizedBox(
+                      width: Helper.setWidth(context, factor: 0.4),
+                      child: FootballListTile(
+                        leading: SvgPicture.asset(
+                          asset,
+                          fit: BoxFit.contain,
+                          height: 20,
+                          width: 20,
+                        ),
+                        title: Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                            color: primary,
+                          ),
+                        ),
+                        subtitle: Text(
+                          subTitle,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                            color: secondary,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: Helper.setWidth(context, factor: 0.4),
+                    ),
+              Expanded(
+                child: Center(
+                  child: Text(
+                    time,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: "Comfortaa",
+                    ),
+                  ),
+                ),
+              ),
+              !isHome
+                  ? SizedBox(
+                      width: Helper.setWidth(context, factor: 0.4),
+                      child: FootballListTile(
+                        leading: SvgPicture.asset(
+                          asset,
+                          fit: BoxFit.contain,
+                          height: 20,
+                          width: 20,
+                        ),
+                        title: Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                            color: primary,
+                          ),
+                        ),
+                        subtitle: Text(
+                          subTitle,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                            color: secondary,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: Helper.setWidth(context, factor: 0.4),
+                    ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

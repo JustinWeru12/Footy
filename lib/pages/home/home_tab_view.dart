@@ -53,7 +53,7 @@ class _HomeTabViewState extends State<HomeTabView> {
           for (int i = 0; i < value.data.length; i++)
             {
               crudObj
-                  .getStrandingsbySeasonID(
+                  .getStandingsbySeasonID(
                       value.data[i].currentSeasonId.toString())
                   .then(
                     (val) => setState(() {

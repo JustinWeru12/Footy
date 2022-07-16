@@ -66,7 +66,7 @@ class _FixtureByLeaguePageState extends State<FixtureByLeaguePage> {
                             )
                           : const PlaceholderWidget(
                               label:
-                                  "Sorry, no spcoming fixtures for this league",
+                                  "Sorry, no upcoming fixtures for this league.",
                             );
                     } else if (snapshot.hasError) {
                       return Center(

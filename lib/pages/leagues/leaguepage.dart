@@ -79,7 +79,7 @@ class _LeaguePageState extends State<LeaguePage> {
                           );
                         }),
                   )
-                : const PlaceholderWidget(label: "Sorry, no leagues to show"),
+                : const PlaceholderWidget(label: "Sorry, no leagues to show."),
           ],
         ));
   }

@@ -32,7 +32,8 @@ class CrudMethods {
     final queryParam = {
       'api_token':
           'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
-      'include': 'localTeam,visitorTeam,tvstations,referee,venue,league,news'
+      'include':
+          'localTeam,visitorTeam,tvstations,referee,venue,league,lineup,events'
     };
     http.Response response = await http.get(
       Uri.https('soccer.sportmonks.com', '/api/v2.0/fixtures/$id', queryParam),
@@ -53,7 +54,8 @@ class CrudMethods {
     final queryParam = {
       'api_token':
           'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
-      'include': 'localTeam,visitorTeam,tvstations,referee,venue,league,news'
+      'include':
+          'localTeam,visitorTeam,tvstations,referee,venue,league,lineup,events'
     };
     http.Response response = await http.get(
       Uri.https(
@@ -70,7 +72,7 @@ class CrudMethods {
     }
   }
 
-  Future<st.Standings> getStrandingsbySeasonID(String id) async {
+  Future<st.Standings> getStandingsbySeasonID(String id) async {
     final queryParam = {
       'api_token':
           'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
@@ -94,7 +96,8 @@ class CrudMethods {
     final queryParam = {
       'api_token':
           'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
-      'include': 'localTeam,visitorTeam,tvstations,referee,venue,league,news'
+      'include':
+          'localTeam,visitorTeam,tvstations,referee,venue,league,lineup,events'
     };
     http.Response response = await http.get(
       Uri.https('soccer.sportmonks.com',

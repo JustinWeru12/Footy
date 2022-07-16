@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 
 class FixtureList {
@@ -79,6 +81,8 @@ class Fixture {
     this.league,
     this.referee,
     this.venue,
+    this.lineup,
+    this.events,
   });
 
   final int? id;
@@ -116,6 +120,8 @@ class Fixture {
   final League? league;
   final Referee? referee;
   final Venue? venue;
+  final Lineup? lineup;
+  final Events? events;
 
   factory Fixture.fromRawJson(String str) => Fixture.fromJson(json.decode(str));
 
@@ -148,7 +154,9 @@ class Fixture {
         standings: Standings.fromJson(json["standings"]),
         assistants: Assistants.fromJson(json["assistants"]),
         leg: json["leg"],
-        // colors: APIColors.fromJson(json["colors"]),
+        colors: json.containsKey("colors") && json["colors"] != null
+            ? APIColors.fromJson(json["colors"])
+            : null,
         deleted: json["deleted"],
         isPlaceholder: json["is_placeholder"],
         localTeam: TeamClass.fromJson(json["localTeam"]),
@@ -157,6 +165,12 @@ class Fixture {
         league: League.fromJson(json["league"]),
         referee: json.containsKey("referee")
             ? Referee.fromJson(json["referee"])
+            : null,
+        events: json.containsKey("events") && json["events"] != null
+            ? Events.fromJson(json["events"])
+            : null,
+        lineup: json.containsKey("lineup") && json["lineup"] != null
+            ? Lineup.fromJson(json["lineup"])
             : null,
         venue: Venue.fromJson(json["venue"]),
       );
@@ -197,6 +211,8 @@ class Fixture {
         "league": league!.toJson(),
         "referee": referee!.toJson(),
         "venue": venue!.toJson(),
+        "lineup": lineup!.toJson(),
+        "events": events!.toJson(),
       };
 }
 
@@ -868,6 +884,491 @@ class VenueData {
       };
 }
 
+class Lineup {
+  Lineup({
+    this.data,
+  });
+
+  final List<LineupDatum>? data;
+
+  factory Lineup.fromRawJson(String str) => Lineup.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Lineup.fromJson(Map<String, dynamic> json) => Lineup(
+        data: json["data"] == null
+            ? null
+            : List<LineupDatum>.from(
+                json["data"].map((x) => LineupDatum.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": data == null
+            ? null
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
+}
+
+class LineupDatum {
+  LineupDatum({
+    this.teamId,
+    this.fixtureId,
+    this.playerId,
+    this.playerName,
+    this.number,
+    this.position,
+    this.additionalPosition,
+    this.formationPosition,
+    this.posx,
+    this.posy,
+    this.captain,
+    this.stats,
+  });
+
+  final int? teamId;
+  final int? fixtureId;
+  final int? playerId;
+  final String? playerName;
+  final int? number;
+  final Position? position;
+  final dynamic additionalPosition;
+  final int? formationPosition;
+  final dynamic posx;
+  final dynamic posy;
+  final bool? captain;
+  final Stats? stats;
+
+  factory LineupDatum.fromRawJson(String str) =>
+      LineupDatum.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory LineupDatum.fromJson(Map<String, dynamic> json) => LineupDatum(
+        teamId: json["team_id"],
+        fixtureId: json["fixture_id"],
+        playerId: json["player_id"],
+        playerName: json["player_name"],
+        number: json["number"],
+        position: json["position"] == null
+            ? null
+            : positionValues.map[json["position"]],
+        additionalPosition: json["additional_position"],
+        formationPosition: json["formation_position"],
+        posx: json["posx"],
+        posy: json["posy"],
+        captain: json["captain"],
+        stats: json["stats"] == null ? null : Stats.fromJson(json["stats"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "team_id": teamId,
+        "fixture_id": fixtureId,
+        "player_id": playerId,
+        "player_name": playerName,
+        "number": number,
+        "position": position == null ? null : positionValues.reverse[position],
+        "additional_position": additionalPosition,
+        "formation_position": formationPosition,
+        "posx": posx,
+        "posy": posy,
+        "captain": captain,
+        "stats": stats == null ? null : stats!.toJson(),
+      };
+}
+
+enum Position { G, D, M, A }
+
+final positionValues = EnumValues(
+    {"A": Position.A, "D": Position.D, "G": Position.G, "M": Position.M});
+
+class Stats {
+  Stats({
+    this.shots,
+    this.goals,
+    this.fouls,
+    this.cards,
+    this.passing,
+    this.dribbles,
+    this.duels,
+    this.other,
+    this.rating,
+  });
+
+  final Shots? shots;
+  final Goals? goals;
+  final Fouls? fouls;
+  final Cards? cards;
+  final Passing? passing;
+  final Dribbles? dribbles;
+  final Duels? duels;
+  final Map<String, int>? other;
+  final String? rating;
+
+  factory Stats.fromRawJson(String str) => Stats.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Stats.fromJson(Map<String, dynamic> json) => Stats(
+        shots: json["shots"] == null ? null : Shots.fromJson(json["shots"]),
+        goals: json["goals"] == null ? null : Goals.fromJson(json["goals"]),
+        fouls: json["fouls"] == null ? null : Fouls.fromJson(json["fouls"]),
+        cards: json["cards"] == null ? null : Cards.fromJson(json["cards"]),
+        passing:
+            json["passing"] == null ? null : Passing.fromJson(json["passing"]),
+        dribbles: json["dribbles"] == null
+            ? null
+            : Dribbles.fromJson(json["dribbles"]),
+        duels: json["duels"] == null ? null : Duels.fromJson(json["duels"]),
+        other: json["other"] == null
+            ? null
+            : Map.from(json["other"])
+                .map((k, v) => MapEntry<String, int>(k, v)),
+        rating: json["rating"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "shots": shots!.toJson(),
+        "goals": goals!.toJson(),
+        "fouls": fouls!.toJson(),
+        "cards": cards!.toJson(),
+        "passing": passing!.toJson(),
+        "dribbles": dribbles!.toJson(),
+        "duels": duels!.toJson(),
+        "other":
+            Map.from(other!).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "rating": rating,
+      };
+}
+
+class Cards {
+  Cards({
+    this.yellowcards,
+    this.redcards,
+    this.yellowredcards,
+  });
+
+  final int? yellowcards;
+  final int? redcards;
+  final int? yellowredcards;
+
+  factory Cards.fromRawJson(String str) => Cards.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Cards.fromJson(Map<String, dynamic> json) => Cards(
+        yellowcards: json["yellowcards"],
+        redcards: json["redcards"],
+        yellowredcards: json["yellowredcards"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "yellowcards": yellowcards,
+        "redcards": redcards,
+        "yellowredcards": yellowredcards,
+      };
+}
+
+class Dribbles {
+  Dribbles({
+    this.attempts,
+    this.success,
+    this.dribbledPast,
+  });
+
+  final int? attempts;
+  final int? success;
+  final int? dribbledPast;
+
+  factory Dribbles.fromRawJson(String str) =>
+      Dribbles.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Dribbles.fromJson(Map<String, dynamic> json) => Dribbles(
+        attempts: json["attempts"],
+        success: json["success"],
+        dribbledPast: json["dribbled_past"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "attempts": attempts,
+        "success": success,
+        "dribbled_past": dribbledPast,
+      };
+}
+
+class Duels {
+  Duels({
+    this.total,
+    this.won,
+  });
+
+  final int? total;
+  final int? won;
+
+  factory Duels.fromRawJson(String str) => Duels.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Duels.fromJson(Map<String, dynamic> json) => Duels(
+        total: json["total"],
+        won: json["won"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "total": total,
+        "won": won,
+      };
+}
+
+class Fouls {
+  Fouls({
+    this.drawn,
+    this.committed,
+  });
+
+  final int? drawn;
+  final int? committed;
+
+  factory Fouls.fromRawJson(String str) => Fouls.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Fouls.fromJson(Map<String, dynamic> json) => Fouls(
+        drawn: json["drawn"],
+        committed: json["committed"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "drawn": drawn,
+        "committed": committed,
+      };
+}
+
+class Goals {
+  Goals({
+    this.scored,
+    this.assists,
+    this.conceded,
+    this.owngoals,
+    this.teamConceded,
+  });
+
+  final int? scored;
+  final int? assists;
+  final int? conceded;
+  final int? owngoals;
+  final int? teamConceded;
+
+  factory Goals.fromRawJson(String str) => Goals.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Goals.fromJson(Map<String, dynamic> json) => Goals(
+        scored: json["scored"],
+        assists: json["assists"],
+        conceded: json["conceded"],
+        owngoals: json["owngoals"],
+        teamConceded: json["team_conceded"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "scored": scored,
+        "assists": assists,
+        "conceded": conceded,
+        "owngoals": owngoals,
+        "team_conceded": teamConceded,
+      };
+}
+
+class Passing {
+  Passing({
+    this.totalCrosses,
+    this.crossesAccuracy,
+    this.passes,
+    this.accuratePasses,
+    this.passesAccuracy,
+    this.keyPasses,
+  });
+
+  final int? totalCrosses;
+  final int? crossesAccuracy;
+  final int? passes;
+  final int? accuratePasses;
+  final int? passesAccuracy;
+  final int? keyPasses;
+
+  factory Passing.fromRawJson(String str) => Passing.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Passing.fromJson(Map<String, dynamic> json) => Passing(
+        totalCrosses: json["total_crosses"],
+        crossesAccuracy: json["crosses_accuracy"],
+        passes: json["passes"],
+        accuratePasses: json["accurate_passes"],
+        passesAccuracy: json["passes_accuracy"],
+        keyPasses: json["key_passes"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "total_crosses": totalCrosses,
+        "crosses_accuracy": crossesAccuracy,
+        "passes": passes,
+        "accurate_passes": accuratePasses,
+        "passes_accuracy": passesAccuracy,
+        "key_passes": keyPasses,
+      };
+}
+
+class Shots {
+  Shots({
+    this.shotsTotal,
+    this.shotsOnGoal,
+  });
+
+  final int? shotsTotal;
+  final int? shotsOnGoal;
+
+  factory Shots.fromRawJson(String str) => Shots.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Shots.fromJson(Map<String, dynamic> json) => Shots(
+        shotsTotal: json["shots_total"],
+        shotsOnGoal: json["shots_on_goal"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "shots_total": shotsTotal,
+        "shots_on_goal": shotsOnGoal,
+      };
+}
+
+class Events {
+  Events({
+    this.data,
+  });
+
+  final List<EventsDatum>? data;
+
+  factory Events.fromRawJson(String str) => Events.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Events.fromJson(Map<String, dynamic> json) => Events(
+        data: json["data"] == null
+            ? null
+            : List<EventsDatum>.from(
+                json["data"].map((x) => EventsDatum.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": data == null
+            ? null
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
+}
+
+class EventsDatum {
+  EventsDatum({
+    this.id,
+    this.teamId,
+    this.type,
+    this.varResult,
+    this.fixtureId,
+    this.playerId,
+    this.playerName,
+    this.relatedPlayerId,
+    this.relatedPlayerName,
+    this.minute,
+    this.extraMinute,
+    this.reason,
+    this.injuried,
+    this.result,
+    this.onPitch,
+  });
+
+  final int? id;
+  final String? teamId;
+  final PurpleType? type;
+  final String? varResult;
+  final int? fixtureId;
+  final int? playerId;
+  final String? playerName;
+  final int? relatedPlayerId;
+  final String? relatedPlayerName;
+  final int? minute;
+  final int? extraMinute;
+  final String? reason;
+  final bool? injuried;
+  final String? result;
+  final bool? onPitch;
+
+  factory EventsDatum.fromRawJson(String str) =>
+      EventsDatum.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory EventsDatum.fromJson(Map<String, dynamic> json) => EventsDatum(
+        id: json["id"],
+        teamId: json["team_id"],
+        type: json["type"] == null ? null : purpleTypeValues.map[json["type"]],
+        varResult: json["var_result"],
+        fixtureId: json["fixture_id"],
+        playerId: json["player_id"],
+        playerName: json["player_name"],
+        relatedPlayerId: json["related_player_id"],
+        relatedPlayerName: json["related_player_name"],
+        minute: json["minute"],
+        extraMinute: json["extra_minute"],
+        reason: json["reason"],
+        injuried: json["injuried"],
+        result: json["result"],
+        onPitch: json["on_pitch"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "team_id": teamId,
+        "type": type == null ? null : purpleTypeValues.reverse[type],
+        "var_result": varResult,
+        "fixture_id": fixtureId,
+        "player_id": playerId,
+        "player_name": playerName,
+        "related_player_id": relatedPlayerId,
+        "related_player_name": relatedPlayerName,
+        "minute": minute,
+        "extra_minute": extraMinute,
+        "reason": reason,
+        "injuried": injuried,
+        "result": result,
+        "on_pitch": onPitch,
+      };
+}
+
+enum PurpleType {
+  SUBSTITUTION,
+  YELLOWCARD,
+  VAR,
+  GOAL,
+  REDCARD,
+  PENALTY,
+  OWN_GOAL,
+  YELLOWRED
+}
+
+final purpleTypeValues = EnumValues({
+  "goal": PurpleType.GOAL,
+  "own-goal": PurpleType.OWN_GOAL,
+  "penalty": PurpleType.PENALTY,
+  "redcard": PurpleType.REDCARD,
+  "substitution": PurpleType.SUBSTITUTION,
+  "var": PurpleType.VAR,
+  "yellowcard": PurpleType.YELLOWCARD,
+  "yellowred": PurpleType.YELLOWRED
+});
+
 class WeatherReport {
   WeatherReport({
     this.code,
@@ -1001,4 +1502,16 @@ class Wind {
         "speed": speed,
         "degree": degree,
       };
+}
+
+class EnumValues<T> {
+  Map<String, T> map;
+  Map<T, String>? reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap ??= map.map((k, v) => MapEntry(v, k));
+    return reverseMap!;
+  }
 }

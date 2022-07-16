@@ -66,14 +66,8 @@ class _FixturesPageState extends State<FixturesPage> {
                           context: context,
                           removeTop: true,
                           child: isEmpty(snapshot)
-                              ? Center(
-                                  child: Text("No Fixtures for this Date",
-                                      style: TextStyle(
-                                          fontFamily: "Comfortaa",
-                                          color: Theme.of(context).primaryColor,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20)),
-                                )
+                              ? const PlaceholderWidget(
+                                  label: "Sorry, no fixtures for this day.")
                               : ListView.builder(
                                   itemCount: snapshot.data!.data.length,
                                   shrinkWrap: true,
@@ -88,7 +82,7 @@ class _FixturesPageState extends State<FixturesPage> {
                                   }),
                         )
                       : const PlaceholderWidget(
-                          label: "Sorry, no fixtures for this day");
+                          label: "Sorry, no fixtures for this day.");
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Text(snapshot.error.toString(),

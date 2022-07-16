@@ -14,22 +14,28 @@ class PlaceholderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      SvgPicture.asset("assets/icons/placeholder.svg",
-          fit: BoxFit.contain,
-          color: Theme.of(context).primaryColor,
-          height: height ?? Helper.setWidth(context, factor: 0.42),
-          width: width ?? Helper.setWidth(context, factor: 0.65)),
-      Center(
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontFamily: "Comfortaa",
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-          ),
+    return SizedBox(
+      width: Helper.setWidth(context),
+      child: Column(children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SvgPicture.asset("assets/icons/placeholder.svg",
+              fit: BoxFit.contain,
+              height: height ?? Helper.setWidth(context, factor: 0.3),
+              width: width ?? Helper.setWidth(context, factor: 0.4)),
         ),
-      )
-    ]);
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontFamily: "Comfortaa",
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
+          ),
+        )
+      ]),
+    );
   }
 }
