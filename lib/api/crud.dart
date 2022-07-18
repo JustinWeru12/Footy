@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:football/classes/fixtures.dart';
+import 'package:football/classes/head2head.dart';
 import 'package:football/classes/leagues.dart';
 import 'package:football/classes/standings.dart' as st;
 import 'package:http/http.dart' as http;
@@ -33,7 +34,7 @@ class CrudMethods {
       'api_token':
           'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
       'include':
-          'localTeam,visitorTeam,tvstations,referee,venue,league,lineup,events'
+          'localTeam,visitorTeam,tvstations,referee,venue,league,lineup,events,stats'
     };
     http.Response response = await http.get(
       Uri.https('soccer.sportmonks.com', '/api/v2.0/fixtures/$id', queryParam),
@@ -55,7 +56,7 @@ class CrudMethods {
       'api_token':
           'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
       'include':
-          'localTeam,visitorTeam,tvstations,referee,venue,league,lineup,events'
+          'localTeam,visitorTeam,tvstations,referee,venue,league,lineup,events,stats'
     };
     http.Response response = await http.get(
       Uri.https(
@@ -97,7 +98,7 @@ class CrudMethods {
       'api_token':
           'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
       'include':
-          'localTeam,visitorTeam,tvstations,referee,venue,league,lineup,events'
+          'localTeam,visitorTeam,tvstations,referee,venue,league,lineup,events,stats'
     };
     http.Response response = await http.get(
       Uri.https('soccer.sportmonks.com',
@@ -109,6 +110,26 @@ class CrudMethods {
     );
     if (response.statusCode == 200) {
       return FixtureList.fromJson(json.decode(response.body));
+    } else {
+      throw Exception("Error while fetching data: ${response.body}");
+    }
+  }
+
+  Future<Head2Head> getHead2Head(String team1, String team2) async {
+    final queryParam = {
+      'api_token':
+          'uleeXmO0GlcNf2Q00H1thSxW3ecN48ne5wwnfkVJOrutzK7t1gsRkiICkg2A',
+    };
+    http.Response response = await http.get(
+      Uri.https('soccer.sportmonks.com', '/api/v2.0/head2head/$team1/$team2',
+          queryParam),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+    if (response.statusCode == 200) {
+      return Head2Head.fromJson(json.decode(response.body));
     } else {
       throw Exception("Error while fetching data: ${response.body}");
     }

@@ -40,7 +40,7 @@ class SingleFixture {
       );
 
   Map<String, dynamic> toJson() => {
-        "fixture": fixture!.toJson(),
+        "fixture": fixture?.toJson(),
       };
 }
 
@@ -83,6 +83,7 @@ class Fixture {
     this.venue,
     this.lineup,
     this.events,
+    this.stats,
   });
 
   final int? id;
@@ -122,6 +123,7 @@ class Fixture {
   final Venue? venue;
   final Lineup? lineup;
   final Events? events;
+  final FixtureStats? stats;
 
   factory Fixture.fromRawJson(String str) => Fixture.fromJson(json.decode(str));
 
@@ -172,6 +174,9 @@ class Fixture {
         lineup: json.containsKey("lineup") && json["lineup"] != null
             ? Lineup.fromJson(json["lineup"])
             : null,
+        stats: json.containsKey("stats") && json["stats"] != null
+            ? FixtureStats.fromJson(json["stats"])
+            : null,
         venue: Venue.fromJson(json["venue"]),
       );
 
@@ -195,24 +200,25 @@ class Fixture {
         "details": details,
         "neutral_venue": neutralVenue,
         "winning_odds_calculated": winningOddsCalculated,
-        "formations": formations!.toJson(),
-        "scores": scores!.toJson(),
-        "time": time!.toJson(),
-        "coaches": coaches!.toJson(),
-        "standings": standings!.toJson(),
-        "assistants": assistants!.toJson(),
+        "formations": formations?.toJson(),
+        "scores": scores?.toJson(),
+        "time": time?.toJson(),
+        "coaches": coaches?.toJson(),
+        "standings": standings?.toJson(),
+        "assistants": assistants?.toJson(),
         "leg": leg,
-        "colors": colors!.toJson(),
+        "colors": colors?.toJson(),
         "deleted": deleted,
         "is_placeholder": isPlaceholder,
-        "localTeam": localTeam!.toJson(),
-        "visitorTeam": visitorTeam!.toJson(),
-        "tvstations": tvstations!.toJson(),
-        "league": league!.toJson(),
-        "referee": referee!.toJson(),
-        "venue": venue!.toJson(),
-        "lineup": lineup!.toJson(),
-        "events": events!.toJson(),
+        "localTeam": localTeam?.toJson(),
+        "visitorTeam": visitorTeam?.toJson(),
+        "tvstations": tvstations?.toJson(),
+        "league": league?.toJson(),
+        "referee": referee?.toJson(),
+        "venue": venue?.toJson(),
+        "lineup": lineup?.toJson(),
+        "events": events?.toJson(),
+        "stats": stats?.toJson(),
       };
 }
 
@@ -289,8 +295,8 @@ class APIColors {
       );
 
   Map<String, dynamic> toJson() => {
-        "localteam": localteam!.toJson(),
-        "visitorteam": visitorteam!.toJson(),
+        "localteam": localteam?.toJson(),
+        "visitorteam": visitorteam?.toJson(),
       };
 }
 
@@ -359,7 +365,7 @@ class League {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data!.toJson(),
+        "data": data?.toJson(),
       };
 }
 
@@ -432,7 +438,7 @@ class LeagueData {
         "current_round_id": currentRoundId,
         "current_stage_id": currentStageId,
         "live_standings": liveStandings,
-        "coverage": coverage!.toJson(),
+        "coverage": coverage?.toJson(),
       };
 }
 
@@ -486,7 +492,7 @@ class TeamClass {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data!.toJson(),
+        "data": data?.toJson(),
       };
 }
 
@@ -571,7 +577,7 @@ class Referee {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data!.toJson(),
+        "data": data?.toJson(),
       };
 }
 
@@ -720,7 +726,7 @@ class Time {
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "starting_at": startingAt!.toJson(),
+        "starting_at": startingAt?.toJson(),
         "minute": minute,
         "second": second,
         "added_time": addedTime,
@@ -831,7 +837,7 @@ class Venue {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data!.toJson(),
+        "data": data?.toJson(),
       };
 }
 
@@ -972,7 +978,7 @@ class LineupDatum {
         "posx": posx,
         "posy": posy,
         "captain": captain,
-        "stats": stats == null ? null : stats!.toJson(),
+        "stats": stats == null ? null : stats?.toJson(),
       };
 }
 
@@ -1027,13 +1033,13 @@ class Stats {
       );
 
   Map<String, dynamic> toJson() => {
-        "shots": shots!.toJson(),
-        "goals": goals!.toJson(),
-        "fouls": fouls!.toJson(),
-        "cards": cards!.toJson(),
-        "passing": passing!.toJson(),
-        "dribbles": dribbles!.toJson(),
-        "duels": duels!.toJson(),
+        "shots": shots?.toJson(),
+        "goals": goals?.toJson(),
+        "fouls": fouls?.toJson(),
+        "cards": cards?.toJson(),
+        "passing": passing?.toJson(),
+        "dribbles": dribbles?.toJson(),
+        "duels": duels?.toJson(),
         "other":
             Map.from(other!).map((k, v) => MapEntry<String, dynamic>(k, v)),
         "rating": rating,
@@ -1419,13 +1425,13 @@ class WeatherReport {
         "code": code,
         "type": type,
         "icon": icon,
-        "temperature": temperature!.toJson(),
-        "temperature_celcius": temperatureCelcius!.toJson(),
+        "temperature": temperature?.toJson(),
+        "temperature_celcius": temperatureCelcius?.toJson(),
         "clouds": clouds,
         "humidity": humidity,
         "pressure": pressure,
-        "wind": wind!.toJson(),
-        "coordinates": coordinates!.toJson(),
+        "wind": wind?.toJson(),
+        "coordinates": coordinates?.toJson(),
         "updated_at": updatedAt!.toIso8601String(),
       };
 }
@@ -1514,4 +1520,234 @@ class EnumValues<T> {
     reverseMap ??= map.map((k, v) => MapEntry(v, k));
     return reverseMap!;
   }
+}
+
+class FixtureStats {
+  FixtureStats({
+    this.data,
+  });
+
+  final List<StatsDatum>? data;
+
+  factory FixtureStats.fromRawJson(String str) =>
+      FixtureStats.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory FixtureStats.fromJson(Map<String, dynamic> json) => FixtureStats(
+        data: json["data"] == null
+            ? null
+            : List<StatsDatum>.from(
+                json["data"].map((x) => StatsDatum.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": data == null
+            ? null
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
+}
+
+class StatsDatum {
+  StatsDatum({
+    this.teamId,
+    this.fixtureId,
+    this.shots,
+    this.passes,
+    this.attacks,
+    this.fouls,
+    this.corners,
+    this.offsides,
+    this.possessiontime,
+    this.yellowcards,
+    this.redcards,
+    this.yellowredcards,
+    this.saves,
+    this.substitutions,
+    this.goalKick,
+    this.goalAttempts,
+    this.freeKick,
+    this.throwIn,
+    this.ballSafe,
+    this.goals,
+    this.penalties,
+    this.injuries,
+    this.tackles,
+  });
+
+  final int? teamId;
+  final int? fixtureId;
+  final DatumShots? shots;
+  final Passes? passes;
+  final Attacks? attacks;
+  final int? fouls;
+  final int? corners;
+  final int? offsides;
+  final int? possessiontime;
+  final int? yellowcards;
+  final int? redcards;
+  final int? yellowredcards;
+  final int? saves;
+  final int? substitutions;
+  final dynamic? goalKick;
+  final int? goalAttempts;
+  final dynamic? freeKick;
+  final dynamic? throwIn;
+  final int? ballSafe;
+  final int? goals;
+  final int? penalties;
+  final int? injuries;
+  final int? tackles;
+
+  factory StatsDatum.fromRawJson(String str) =>
+      StatsDatum.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory StatsDatum.fromJson(Map<String, dynamic> json) => StatsDatum(
+        teamId: json["team_id"],
+        fixtureId: json["fixture_id"],
+        shots:
+            json["shots"] == null ? null : DatumShots.fromJson(json["shots"]),
+        passes: json["passes"] == null ? null : Passes.fromJson(json["passes"]),
+        attacks:
+            json["attacks"] == null ? null : Attacks.fromJson(json["attacks"]),
+        fouls: json["fouls"],
+        corners: json["corners"],
+        offsides: json["offsides"],
+        possessiontime: json["possessiontime"],
+        yellowcards: json["yellowcards"],
+        redcards: json["redcards"],
+        yellowredcards: json["yellowredcards"],
+        saves: json["saves"],
+        substitutions: json["substitutions"],
+        goalKick: json["goal_kick"],
+        goalAttempts: json["goal_attempts"],
+        freeKick: json["free_kick"],
+        throwIn: json["throw_in"],
+        ballSafe: json["ball_safe"],
+        goals: json["goals"],
+        penalties: json["penalties"],
+        injuries: json["injuries"],
+        tackles: json["tackles"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "team_id": teamId,
+        "fixture_id": fixtureId,
+        "shots": shots == null ? null : shots?.toJson(),
+        "passes": passes == null ? null : passes?.toJson(),
+        "attacks": attacks == null ? null : attacks?.toJson(),
+        "fouls": fouls,
+        "corners": corners,
+        "offsides": offsides,
+        "possessiontime": possessiontime,
+        "yellowcards": yellowcards,
+        "redcards": redcards,
+        "yellowredcards": yellowredcards,
+        "saves": saves,
+        "substitutions": substitutions,
+        "goal_kick": goalKick,
+        "goal_attempts": goalAttempts,
+        "free_kick": freeKick,
+        "throw_in": throwIn,
+        "ball_safe": ballSafe,
+        "goals": goals,
+        "penalties": penalties,
+        "injuries": injuries,
+        "tackles": tackles,
+      };
+}
+
+class Attacks {
+  Attacks({
+    this.attacks,
+    this.dangerousAttacks,
+  });
+
+  final int? attacks;
+  final int? dangerousAttacks;
+
+  factory Attacks.fromRawJson(String str) => Attacks.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Attacks.fromJson(Map<String, dynamic> json) => Attacks(
+        attacks: json["attacks"],
+        dangerousAttacks: json["dangerous_attacks"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "attacks": attacks,
+        "dangerous_attacks": dangerousAttacks,
+      };
+}
+
+class Passes {
+  Passes({
+    this.total,
+    this.accurate,
+    this.percentage,
+  });
+
+  final int? total;
+  final int? accurate;
+  final double? percentage;
+
+  factory Passes.fromRawJson(String str) => Passes.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Passes.fromJson(Map<String, dynamic> json) => Passes(
+        total: json["total"],
+        accurate: json["accurate"],
+        percentage: json["percentage"]?.toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "total": total,
+        "accurate": accurate,
+        "percentage": percentage,
+      };
+}
+
+class DatumShots {
+  DatumShots({
+    this.total,
+    this.ongoal,
+    this.blocked,
+    this.offgoal,
+    this.insidebox,
+    this.outsidebox,
+  });
+
+  final int? total;
+  final int? ongoal;
+  final int? blocked;
+  final int? offgoal;
+  final int? insidebox;
+  final int? outsidebox;
+
+  factory DatumShots.fromRawJson(String str) =>
+      DatumShots.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory DatumShots.fromJson(Map<String, dynamic> json) => DatumShots(
+        total: json["total"],
+        ongoal: json["ongoal"],
+        blocked: json["blocked"],
+        offgoal: json["offgoal"],
+        insidebox: json["insidebox"],
+        outsidebox: json["outsidebox"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "total": total,
+        "ongoal": ongoal,
+        "blocked": blocked,
+        "offgoal": offgoal,
+        "insidebox": insidebox,
+        "outsidebox": outsidebox,
+      };
 }

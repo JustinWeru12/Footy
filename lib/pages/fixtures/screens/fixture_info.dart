@@ -3,14 +3,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:football/api/crud.dart';
 import 'package:football/classes/fixtures.dart';
+import 'package:football/classes/head2head.dart';
 import 'package:football/models/helper.dart';
 import 'package:football/models/placeholder.dart';
 import 'package:football/services/default_spacer.dart';
 import 'package:football/classes/standings.dart' as st;
 import 'package:football/services/theme/footy_theme.dart';
 import 'package:football/widgets/footy_list_tile.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -28,11 +29,20 @@ class FixtureInfo extends StatefulWidget {
 
 class _FixtureInfoState extends State<FixtureInfo> {
   bool isPast = false;
-
+  Head2Head _head2head = Head2Head();
+  CrudMethods crudObj = CrudMethods();
   @override
   void initState() {
     isPast =
         widget.fixture.scores != null && widget.fixture.scores!.ftScore != null;
+    crudObj
+        .getHead2Head(widget.fixture.localteamId.toString(),
+            widget.fixture.visitorteamId.toString())
+        .then((val) {
+      setState(() {
+        _head2head = val;
+      });
+    });
     super.initState();
   }
 
@@ -134,7 +144,7 @@ class _FixtureInfoState extends State<FixtureInfo> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 7,
       child: FootballScaffold(
           title: "Fixture",
           body: SizedBox(
@@ -272,9 +282,9 @@ class _FixtureInfoState extends State<FixtureInfo> {
   }
 
   Widget tabBar() {
-    return const FootballTabBar(
+    return FootballTabBar(
       tabs: [
-        FootballTab(
+        const FootballTab(
           icon: Icon(
             FeatherIcons.tv,
             size: 18,
@@ -283,7 +293,7 @@ class _FixtureInfoState extends State<FixtureInfo> {
             "TV Stations",
           ),
         ),
-        FootballTab(
+        const FootballTab(
           icon: Icon(
             FeatherIcons.info,
             size: 18,
@@ -292,7 +302,7 @@ class _FixtureInfoState extends State<FixtureInfo> {
             "Info",
           ),
         ),
-        FootballTab(
+        const FootballTab(
           icon: Icon(
             Icons.table_chart_outlined,
             size: 18,
@@ -301,7 +311,7 @@ class _FixtureInfoState extends State<FixtureInfo> {
             "Table",
           ),
         ),
-        FootballTab(
+        const FootballTab(
           icon: Icon(
             Icons.people_alt_outlined,
             size: 18,
@@ -310,13 +320,33 @@ class _FixtureInfoState extends State<FixtureInfo> {
             "Lineup",
           ),
         ),
-        FootballTab(
+        const FootballTab(
           icon: Icon(
             FeatherIcons.activity,
             size: 18,
           ),
           text: Text(
             "Events",
+          ),
+        ),
+        const FootballTab(
+          icon: Icon(
+            FeatherIcons.barChart2,
+            size: 18,
+          ),
+          text: Text(
+            "Stats",
+          ),
+        ),
+        FootballTab(
+          icon: SvgPicture.asset(
+            "assets/icons/h2h.svg",
+            height: 16,
+            width: 16,
+            color: Theme.of(context).iconTheme.color,
+          ),
+          text: const Text(
+            "Head2Head",
           ),
         ),
       ],
@@ -332,6 +362,8 @@ class _FixtureInfoState extends State<FixtureInfo> {
           table(),
           lineup(),
           events(),
+          stats(),
+          h2hinfo(),
         ],
       ),
     );
@@ -606,10 +638,10 @@ class _FixtureInfoState extends State<FixtureInfo> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            smallVerticalSpacer,
                             formation(
                                 widget.fixture.formations?.localteamFormation ??
                                     ""),
+                            smallVerticalSpacer,
                             lineUpRow(1, 0,
                                 getPlayerRow(widget.fixture.localteamId!)),
                             ...List.generate(
@@ -879,8 +911,10 @@ class _FixtureInfoState extends State<FixtureInfo> {
             children: [
               isHome
                   ? SizedBox(
-                      width: Helper.setWidth(context, factor: 0.4),
+                      width: Helper.setWidth(context, factor: 0.45),
                       child: FootballListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 2.0, vertical: 16),
                         leading: SvgPicture.asset(
                           asset,
                           fit: BoxFit.contain,
@@ -907,7 +941,7 @@ class _FixtureInfoState extends State<FixtureInfo> {
                       ),
                     )
                   : Container(
-                      width: Helper.setWidth(context, factor: 0.4),
+                      width: Helper.setWidth(context, factor: 0.45),
                     ),
               Expanded(
                 child: Center(
@@ -923,8 +957,10 @@ class _FixtureInfoState extends State<FixtureInfo> {
               ),
               !isHome
                   ? SizedBox(
-                      width: Helper.setWidth(context, factor: 0.4),
+                      width: Helper.setWidth(context, factor: 0.45),
                       child: FootballListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 2.0, vertical: 16),
                         leading: SvgPicture.asset(
                           asset,
                           fit: BoxFit.contain,
@@ -951,7 +987,7 @@ class _FixtureInfoState extends State<FixtureInfo> {
                       ),
                     )
                   : Container(
-                      width: Helper.setWidth(context, factor: 0.4),
+                      width: Helper.setWidth(context, factor: 0.45),
                     ),
             ],
           ),
@@ -972,13 +1008,17 @@ class _FixtureInfoState extends State<FixtureInfo> {
             children: [
               isHome
                   ? SizedBox(
-                      width: Helper.setWidth(context, factor: 0.4),
+                      width: Helper.setWidth(context, factor: 0.45),
                       child: FootballListTile(
-                        leading: SvgPicture.asset(
-                          asset,
-                          fit: BoxFit.contain,
-                          height: 20,
-                          width: 20,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 2.0, vertical: 16),
+                        leading: Center(
+                          child: SvgPicture.asset(
+                            asset,
+                            fit: BoxFit.contain,
+                            height: 20,
+                            width: 20,
+                          ),
                         ),
                         title: Text(
                           title,
@@ -1001,7 +1041,7 @@ class _FixtureInfoState extends State<FixtureInfo> {
                       ),
                     )
                   : Container(
-                      width: Helper.setWidth(context, factor: 0.4),
+                      width: Helper.setWidth(context, factor: 0.45),
                     ),
               Expanded(
                 child: Center(
@@ -1017,8 +1057,10 @@ class _FixtureInfoState extends State<FixtureInfo> {
               ),
               !isHome
                   ? SizedBox(
-                      width: Helper.setWidth(context, factor: 0.4),
+                      width: Helper.setWidth(context, factor: 0.45),
                       child: FootballListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 2.0, vertical: 16),
                         leading: SvgPicture.asset(
                           asset,
                           fit: BoxFit.contain,
@@ -1046,12 +1088,206 @@ class _FixtureInfoState extends State<FixtureInfo> {
                       ),
                     )
                   : Container(
-                      width: Helper.setWidth(context, factor: 0.4),
+                      width: Helper.setWidth(context, factor: 0.45),
                     ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget stats() {
+    if (widget.fixture.stats != null &&
+        widget.fixture.stats!.data!.isNotEmpty) {
+      List<StatsDatum> homeStat = widget.fixture.stats!.data!
+          .where((element) => element.teamId == widget.fixture.localteamId)
+          .toList();
+      List<StatsDatum> awayStat = widget.fixture.stats!.data!
+          .where((element) => element.teamId == widget.fixture.visitorteamId)
+          .toList();
+      return SingleChildScrollView(
+          child: Column(
+        children: [
+          statItem(homeStat[0].shots?.total?.toString() ?? "_", "Shots",
+              awayStat[0].shots?.total?.toString() ?? "_"),
+          statItem(homeStat[0].shots?.ongoal?.toString() ?? "_",
+              "Shots on Target", awayStat[0].shots?.ongoal?.toString() ?? "_"),
+          statItem("${homeStat[0].possessiontime ?? "_"}%", "Possesion",
+              "${awayStat[0].possessiontime ?? "_"}%"),
+          statItem(homeStat[0].passes?.total?.toString() ?? "_", "Passes",
+              awayStat[0].passes?.total?.toString() ?? "_"),
+          statItem(
+              "${homeStat[0].passes?.percentage?.round() ?? "_"}%",
+              "Pass Accuracy",
+              "${awayStat[0].passes?.percentage?.round() ?? "_"}%"),
+          statItem(homeStat[0].fouls?.toString() ?? "_", "Fouls",
+              awayStat[0].fouls?.toString() ?? "_"),
+          statItem(homeStat[0].yellowcards?.toString() ?? "_", "Yellow cards",
+              awayStat[0].yellowcards?.toString() ?? "_"),
+          statItem(homeStat[0].redcards?.toString() ?? "_", "Red Cards",
+              awayStat[0].redcards?.toString() ?? "_"),
+          statItem(homeStat[0].offsides?.toString() ?? "_", "Offsides",
+              awayStat[0].offsides?.toString() ?? "_"),
+          statItem(homeStat[0].corners?.toString() ?? "_", "Corners",
+              awayStat[0].corners?.toString() ?? "_"),
+          statItem(homeStat[0].penalties?.toString() ?? "_", "Penalty Kicks",
+              awayStat[0].penalties?.toString() ?? "_"),
+        ],
+      ));
+    } else {
+      return const PlaceholderWidget(
+          label: "Sorry, stats not availble for this match");
+    }
+  }
+
+  Widget statItem(String team1, String title, String team2) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      child: FootballListCard(
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                team1,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "Comfortaa",
+                ),
+              ),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "Comfortaa",
+                ),
+              ),
+              Text(
+                team2,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "Comfortaa",
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget h2hinfo() {
+    if (_head2head.data != null && _head2head.data!.isNotEmpty) {
+      return MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: _head2head.data!.length,
+          itemBuilder: (context, i) {
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+              child: FootballListCard(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: Helper.setWidth(context, factor: 0.35),
+                      child: Center(
+                        child: Text(
+                          teamName(_head2head.data?[i].localteamId),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                            color: isWinner(_head2head.data?[i].localteamId,
+                                    _head2head.data?[i].winnerTeamId)
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          _head2head.data?[i].scores?.ftScore ?? "TBD",
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: Helper.setWidth(context, factor: 0.35),
+                      child: Center(
+                        child: Text(
+                          teamName(_head2head.data?[i].visitorteamId),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Comfortaa",
+                            color: isWinner(_head2head.data?[i].visitorteamId,
+                                    _head2head.data?[i].winnerTeamId)
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                subtitle: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      DateFormat('yyyy-MM-dd  HH:MM').format(
+                          _head2head.data![i].time!.startingAt!.dateTime!),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Comfortaa",
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return const PlaceholderWidget(
+          label: "Sorry, Head 2 Head information not Available");
+    }
+  }
+
+  String teamName(int? id) {
+    if (id == widget.fixture.localteamId) {
+      return widget.fixture.localTeam?.data?.name ?? "";
+    } else if (id == widget.fixture.visitorteamId) {
+      return widget.fixture.visitorTeam?.data?.name ?? "";
+    } else {
+      return "";
+    }
+  }
+
+  bool isWinner(int? id, int? winner) {
+    if (id == winner) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
